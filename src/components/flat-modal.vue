@@ -16,7 +16,7 @@
           </div>
           <div class="modal-footer">
             <slot name="footer">
-              <button class="modal-default-button" @click="$emit('close')">
+              <button class="modal-default-button clickable" @click="$emit('close')">
                 OK
               </button>
             </slot>
@@ -82,7 +82,9 @@ export default class FlatModal extends Vue {
 
 .modal-footer {
   border-top: 0px;
+  position: relative;
 }
+
 .modal-default-button {
   text-align: center;
   text-decoration: none;
