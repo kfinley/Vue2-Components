@@ -34,7 +34,7 @@ import Component from "vue-class-component";
 
 @Component
 export default class FlatModal extends Vue {
-  name = "Modal";
+  name = "FlatModal";
 }
 </script>
 
