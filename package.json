@@ -5,7 +5,9 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "deploy-storybook": "storybook-to-ghpages",
+    "deploy-storybook:local": "rm -rf storybooks && storybook-to-ghpages --out=storybook --dry-run && find src -type f -name storybooks -exec rm -f {} \\;"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -15,6 +17,7 @@
     "@storybook/addon-links": "^6.4.19",
     "@storybook/builder-webpack5": "^6.5.0-alpha.47",
     "@storybook/manager-webpack5": "^6.5.0-alpha.47",
+    "@storybook/storybook-deployer": "^2.8.11",
     "@storybook/vue": "^6.4.19",
     "@vue/cli-plugin-babel": "~4.5.15",
     "@vue/cli-plugin-eslint": "~4.5.15",
