@@ -6,8 +6,7 @@
     "lint": "vue-cli-service lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "deploy-storybook": "storybook-to-ghpages",
-    "deploy-storybook:local": "rm -rf storybooks && storybook-to-ghpages --out=storybook --dry-run && find src -type f -name storybooks -exec rm -f {} \\;"
+    "deploy-storybook": "storybook-to-ghpages"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
