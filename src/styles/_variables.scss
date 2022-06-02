@@ -1,0 +1,109 @@
+// Black & White
+$color--white: #fff;
+$color--black: #000;
+$color--cool-black: #222;
+$color--transparent-black: rgba(0, 0, 0, 0.9);
+
+// Blue
+$color--very-light-blue: #b3d2e2;
+$color--light-blue: #355d9d;
+$color--active-blue: rgb(35, 65, 85);
+$color--blue: #0c092d;
+$color--deep-blue: #080438;
+
+// Green
+$color--very-light-green: #eef8ec;
+$color--lighter-green: #eef6ec;
+$color--light-green: #b7deb2;
+$color--medium-light-green: #3fb97c;
+$color--green: #3B8363;
+$color--bold-green: #0C854F;
+$color--dark-green: #387430;
+$color--transparent-green: rgba(0, 138, 0, 0.05);
+
+
+// Grey
+$color--grey95: #f8f8f8;
+$color--grey90: #eee;
+$color--grey80: #ddd;
+$color--grey70: #ccc;
+$color--grey60: #888;
+$color--grey: #666;
+$color--grey20: #454545;
+$color--grey10: #292929;
+$color--transparent-grey: rgba(60, 60, 67, 0.5);
+
+// Red
+$color--very-light-red: #d69ba0;
+$color--light-red: #d6535e;
+$color--red: #9d2630;
+$color--bright-red: #db2a3a;
+$color--dark-red: #9b1b35;
+$color--very-light-red: lighten($color--dark-red, 50%);
+
+// Yellow
+$color--yellow: #ffe600;
+$color--light-yellow: lighten($color--yellow, 25%);
+$color--dark-yellow: #c9c123;
+
+// Primary
+$color--primary: $color--blue;
+$color--cancel: $color--grey;
+$color--delete: $color--dark-red;
+
+// Active
+$color--active: $color--active-blue;
+$color--active-text: #ffffff;
+$color--active--hover: $color--active-blue;
+
+// Notifications
+$notification--error-color: $color--dark-red;
+$notification--warning-color: $color--light-yellow;
+$notification--success-color: $color--green;
+
+// Fonts
+$font-family: "Nunito Sans", sans-serif;
+$font-family-condensed: "Nunito Sans Condensed", "Nunito Sans", sans-serif;
+
+// padding sizes
+$s: 10px;
+$sp: 12px;
+
+$transition--default-time: 200ms;
+$border-radius: $s;
+
+
+// Bootstrap bps
+$bp--xs-min: 600px;
+$bp--xs-max: 767px;
+$bp--sm-min: 768px;
+$bp--sm-max: 991px;
+$bp--md-min: 992px;
+$bp--md-max: 1199px;
+$bp--lg-min: 1200px;
+$bp--xl-min: 1440px;
+
+// phone bps
+$bp--phone-xs-min: 350px;
+$bp--phone-xs-max: 379px;
+$bp--phone-sm-min: 380px;
+$bp--phone-sm-max: 479px;
+$bp--phone-lg-min: 480px;
+$bp--phone-lg-max: 599px;
+
+
+
+//TODO: Clean up...
+
+$body-color: #555c69;
+$body-background: #fff;
+
+$light: #fff;
+$dark: #000;
+$stripe-color: #eff0fa;
+$header-border: #dee2e6;
+
+$primary-gradient-start: #6b76bd;
+$primary-gradient-end: #112282;
+
+$primary-button-background: linear-gradient(170deg, $primary-gradient-start 0%, $primary-gradient-end 100%);
