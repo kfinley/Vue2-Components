@@ -4,6 +4,7 @@ import BubbleButtonBanner from './buttons/bubble-button-banner.vue';
 import Button from './buttons/button.vue';
 import Card from './card.vue';
 import FatToggle from './toggles/fat-toggle.vue';
+import FlatModal from './flat-modal.vue';
 import FlatToggle from './toggles/flat-toggle.vue';
 import Notification from './notification.vue';
 import NotificationList from './notification-list.vue';
@@ -17,6 +18,7 @@ export {
   Button,
   Card,
   FatToggle,
+  FlatModal,
   FlatToggle,
   Notification,
   NotificationList,
