@@ -1,6 +1,6 @@
 import { Story } from '@storybook/vue/types-6-0';
 import Card from '@/components/card.vue';
-import Entity from '@/components/entity.vue';
+import DraggableEntity from '@/components/draggable-entity.vue';
 import { action } from '@storybook/addon-actions';
 
 const dragged = (direction: string) => action(`dragged ${direction}`);
@@ -13,23 +13,23 @@ export default {
   }
 };
 
-const DefaultTemplate: Story = (args, { argTypes }) => ({
-  components: { Card, Entity },
+const DraggableTemplate: Story = (args, { argTypes }) => ({
+  components: { Card, DraggableEntity },
   props: Object.keys(args),
   template:
-    `<entity v-bind="$props">
+    `<draggable-entity v-bind="$props">
         <card>
-          <slot name="header"><h3 style="text-align:center;">Entity Example</h3></slot>
+          <slot name="header"><h3 style="text-align:center;">Draggable Entity Example</h3></slot>
           <div class="text-center">
             <p>Name: {{ entity.name }}</p>
             <p>Description: {{ entity.description }}</p>
           </div>
         </card>
-    </entity>`
+    </draggable-entity>`
 });
 
-var entity = { id: 123, name: "Some Event", description: "The description of the event" }
-export const Default = DefaultTemplate.bind({});
-Default.args = {
+var entity = { id: 123, name: "Draggable Event", description: "This event is draggable!!" }
+export const Draggable = DraggableTemplate.bind({});
+Draggable.args = {
   entity: entity,
 };
