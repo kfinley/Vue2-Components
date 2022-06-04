@@ -1,7 +1,10 @@
 # vue2-components
-This is a example Vue2 component library design system built in TypeScript using [Storybook](https://storybook.js.org).
+This is an example Vue2 component library design system built in TypeScript using [Storybook](https://storybook.js.org).
 
 The Storybook can be viewed at [kfinley.github.io/Vue2-Components](https://kfinley.github.io/Vue2-Components/).
+
+### Overview for using Storybook web interface
+Select a component from the Sidebar and view it on the Canvas. 
 
 ### Setup & Run
 
