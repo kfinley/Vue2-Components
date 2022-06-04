@@ -8,18 +8,18 @@ export default {
     timed: {
       control: { type: "boolean" },
       required: true,
-      meta_description: "Determines whether the notification will clear itself after 5 seconds"
+      meta_description: "Determines if the notification will clear itself after 5 seconds"
     },
     message: {
       control: { type: "text" },
       required: true,
-      meta_description: "The message to be displayed in the notification itself"
+      meta_description: "The message to be displayed"
     },
     type: {
       control: { type: "select" },
       options: ["alert", "error", "success"],
       required: true,
-      meta_description: "The type of notification to be displayed."
+      meta_description: "The type of notification"
     }
   }
 };
@@ -30,16 +30,16 @@ const Template: Story = (args, { argTypes }) => ({
   template: '<notification v-bind="$props">{{ message }}</notification>'
 });
 
-export const SuccessNotification = Template.bind({});
-SuccessNotification.args = {
+export const Success = Template.bind({});
+Success.args = {
   timed: false,
   message: "This is a success notification!",
   type: "success"
 };
 
-export const TimedNotification = Template.bind({});
-TimedNotification.args = {
+export const Timed = Template.bind({});
+Timed.args = {
   timed: true,
-  message: "This alert message will disappear after 5 seconds!",
+  message: "This message will close in 5 seconds!",
   type: "warning"
 }
