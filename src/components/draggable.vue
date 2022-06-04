@@ -172,7 +172,6 @@ export default class Draggable extends Vue implements DraggableProps {
   }
 
   onEnd(event: Interact.InteractEvent) {
-    console.log("onEnd");
 
     const x = (this.position.x || 0) + event.dx;
     const y = (this.position.y || 0) + event.dy;
