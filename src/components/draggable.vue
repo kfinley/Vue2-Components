@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang='ts'>
 import Vue from "vue";
 import { Component, Prop, Emit, Watch } from "vue-property-decorator";
 import interact from "interactjs";
@@ -30,9 +30,6 @@ export interface DraggableProps {
   xThreshold: number;
 }
 
-/*
-  TODO: Fix the rotation on drag. It's still pivoting around center.
-*/
 @Component
 export default class Draggable extends Vue implements DraggableProps {
   @Prop({ default: 0 }) maxRotation!: number;
@@ -47,6 +44,7 @@ export default class Draggable extends Vue implements DraggableProps {
     y: 0,
     rotation: 0,
   };
+  lastXPosition = 0; //TODO: move to InteractPosition and add Y
 
   mounted() {
     const element = this.$refs.interactElement as Interact.Target;
@@ -91,11 +89,6 @@ export default class Draggable extends Vue implements DraggableProps {
 
   setPosition(coordinates: InteractPosition) {
     this.position = coordinates;
-
-    // console.log(`setPosition ${this.position}`);
-    // console.log(
-    //   `${this.position.x} ${this.position.y} ${this.position.rotation}`
-    // );
   }
 
   resetPosition() {
@@ -111,6 +104,44 @@ export default class Draggable extends Vue implements DraggableProps {
   }
 
   onMove(event: Interact.InteractEvent) {
+    const x = (this.position.x || 0) + event.dx;
+    const y = (this.position.y || 0) + event.dy;
+
+    let calc = (x - this.lastXPosition) / this.xThreshold;
+
+    let rotation = this.maxRotation * calc;
+
+    //let moving = 'none';
+    if (x < this.lastXPosition) {
+      if (x < this.position.x) {
+        calc = (x - this.lastXPosition) / this.xThreshold;
+      } else {
+        calc = (Math.abs(this.lastXPosition) - Math.abs(x)) / this.xThreshold;
+      }
+      //moving = 'left';
+      rotation = this.maxRotation * calc;
+    }
+    // else {
+    //   moving = 'right';
+    // }
+    // console.log(`rotation: ${rotation.toFixed(2)}`);
+
+    if (rotation > this.maxRotation) rotation = this.maxRotation;
+    else if (rotation < -this.maxRotation) rotation = -this.maxRotation;
+
+    // console.log(
+    //   `moving ${moving}
+    //     lastX: ${this.lastXPosition.toFixed(2)}
+    //     x: ${x.toFixed(2)}
+    //     position.x: ${this.position.x.toFixed(2)}
+    //     calc: ${calc.toFixed(2)}
+    //     rotation: ${rotation}`
+    // );
+
+    this.setPosition({ x, y, rotation });
+  }
+
+  onMoveKlunky(event: Interact.InteractEvent) {
     // works but very clunky
     const x = (this.position.x || 0) + event.dx;
     const y = (this.position.y || 0) + event.dy;
@@ -119,11 +150,11 @@ export default class Draggable extends Vue implements DraggableProps {
 
     let rotation = this.maxRotation * calc;
 
-    // let moving = "none";
+    // let moving = 'none';
     // if (x < this.position.x) {
-    //   moving = "left";
+    //   moving = 'left';
     // } else if (x > this.lastXPosition) {
-    //   moving = "right";
+    //   moving = 'right';
     // }
     // console.log(
     //   `moving ${moving}
@@ -139,8 +170,6 @@ export default class Draggable extends Vue implements DraggableProps {
 
     this.setPosition({ x, y, rotation });
   }
-
-  lastXPosition = 0;
 
   onEnd(event: Interact.InteractEvent) {
     console.log("onEnd");
