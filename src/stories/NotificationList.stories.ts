@@ -24,7 +24,7 @@ List.args = {
   notifications: [
     {
       type: "error",
-      message: "Error! something went wrong.  :(",
+      message: "Error! Something went wrong.  :(",
       timed: false
     },
     {
