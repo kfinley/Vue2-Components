@@ -6,7 +6,7 @@
       transform: transformString,
       transition: transitionString,
       opacity: opacityString,
-      position: 'relative'
+      position: 'relative',
     }"
   >
     <slot />
@@ -62,7 +62,9 @@ export default class Draggable extends Vue implements DraggableProps {
   get transformString() {
     if (!this.isDraggable || this.dragged) {
       const { x, y, rotation } = this.position;
-      return `translate3D(${x}px, ${y}px, 0) rotate(${rotation}deg)`;
+      const transform = `translate3D(${x}px, ${y}px, 0) rotate(${rotation}deg)`;
+      // console.log(transform);
+      return transform;
     }
     return "";
   }
@@ -80,6 +82,8 @@ export default class Draggable extends Vue implements DraggableProps {
   }
 
   get draggableClasses() {
+    //TODO: look into this....
+
     const classes = { draggable: this.isDraggable, item: "true" };
     (classes as any)[`${this.type.toLowerCase()}-entity`] = true;
     return classes;
@@ -87,6 +91,11 @@ export default class Draggable extends Vue implements DraggableProps {
 
   setPosition(coordinates: InteractPosition) {
     this.position = coordinates;
+
+    // console.log(`setPosition ${this.position}`);
+    // console.log(
+    //   `${this.position.x} ${this.position.y} ${this.position.rotation}`
+    // );
   }
 
   resetPosition() {
@@ -96,14 +105,34 @@ export default class Draggable extends Vue implements DraggableProps {
   onStart(event: Interact.InteractEvent): void {
     this.isDraggable = false;
     // Set the target z-index to a higher value than the last dropped element
-    event.target.style.zIndex = Math.ceil(new Date().getTime() / 1000).toString();
+    event.target.style.zIndex = Math.ceil(
+      new Date().getTime() / 1000
+    ).toString();
   }
 
   onMove(event: Interact.InteractEvent) {
+    // works but very clunky
     const x = (this.position.x || 0) + event.dx;
     const y = (this.position.y || 0) + event.dy;
 
-    let rotation = this.maxRotation * (x / this.xThreshold);
+    const calc = ((x - this.position.x) / this.xThreshold) * 25;
+
+    let rotation = this.maxRotation * calc;
+
+    // let moving = "none";
+    // if (x < this.position.x) {
+    //   moving = "left";
+    // } else if (x > this.lastXPosition) {
+    //   moving = "right";
+    // }
+    // console.log(
+    //   `moving ${moving}
+    //     lastX: ${this.lastXPosition.toFixed(2)}
+    //     x: ${x.toFixed(2)}
+    //     position.x: ${this.position.x.toFixed(2)}
+    //     calc: ${calc.toFixed(2)}
+    //     rotation: ${rotation.toFixed(2)}`
+    // );
 
     if (rotation > this.maxRotation) rotation = this.maxRotation;
     else if (rotation < -this.maxRotation) rotation = -this.maxRotation;
@@ -111,13 +140,19 @@ export default class Draggable extends Vue implements DraggableProps {
     this.setPosition({ x, y, rotation });
   }
 
+  lastXPosition = 0;
+
   onEnd(event: Interact.InteractEvent) {
+    console.log("onEnd");
+
     const x = (this.position.x || 0) + event.dx;
     const y = (this.position.y || 0) + event.dy;
 
+    this.lastXPosition = x;
+
     this.isDraggable = true;
     this.dragged = true;
-    this.setPosition({ x, y, rotation: 0});
+    this.setPosition({ x, y, rotation: 0 });
   }
 }
 </script>
