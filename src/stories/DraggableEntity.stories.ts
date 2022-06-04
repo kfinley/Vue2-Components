@@ -1,7 +1,6 @@
 import { Story } from '@storybook/vue/types-6-0';
 import Card from '@/components/card.vue';
 import DraggableEntity from '@/components/draggable-entity.vue';
-import { action } from '@storybook/addon-actions';
 
 export default {
   title: 'Components/Controls/Entity',
