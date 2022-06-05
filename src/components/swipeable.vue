@@ -56,23 +56,23 @@ export default class Swipeable extends Vue {
 
   @Watch("item")
   itemChanged() {
-    console.log("item changed...");
+    //console.log("item changed...");
 
     if (this.item.visible == false) {
       setTimeout(() => {
-        console.log("remove item");
-        console.log(this.outOfSightXCoordinate);
+        //console.log("remove item");
+        //console.log(this.outOfSightXCoordinate);
         this.outOfSight = true;
         this.$emit("outOfSight", this.item);
         this.dragged = false;
-        console.log(this.transformString);
+        //console.log(this.transformString);
         this.resetPosition();
         this.isAnimating = true;
-        console.log(this.opacityString);
+        //console.log(this.opacityString);
         this.resetElement();
-      }, 333);
+      }, 200);
     } else {
-      console.log('item visible is true');
+      //console.log("item visible is true");
     }
   }
 
@@ -247,6 +247,7 @@ export default class Swipeable extends Vue {
       this.draggedUp();
       return { direction: "up", id };
     } else this.resetPosition();
+    return { direction: "none", id };
   }
 }
 </script>

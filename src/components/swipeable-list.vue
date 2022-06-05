@@ -59,38 +59,37 @@ export default class SwipeableList extends Vue {
     dragged: { direction: string; id: any }
   ) => {
     if (dragged.direction == "right" || dragged.direction == "left") {
-      console.log(dragged);
       items = items.map((o) => {
         if (o.id === dragged.id) return { ...o, visible: false };
         return o;
       });
-      console.log("updated items");
-      console.log(items);
-      return items;
     }
+    //console.log("updated items");
+    //console.log(items);
+    return items;
   };
 
   outOfSightFunc = (
     items: Array<{ id: string; name: string; visible: boolean }>,
     item: { id: string }
   ) => {
-    console.log("outOfSight");
+    //console.log("outOfSight");
 
     items = items.filter((i) => i.id != item.id);
-    console.log(items);
+    //console.log(items);
     return items;
   };
 
   @Emit("outOfSight")
   outOfSight(item: { id: string; name: string; visible: boolean }) {
-    console.log(`remove item id: ${item.id}`);
+    //console.log(`remove item id: ${item.id}`);
     return { outOfSightHandle: this.outOfSightFunc, item };
   }
 
   @Watch("items")
   refresh() {
-    console.log("items changed in list");
-    console.log(this.items);
+    //console.log("items changed in list");
+    //console.log(this.items);
   }
 }
 </script>

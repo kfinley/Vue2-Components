@@ -9,6 +9,8 @@ export default {
   }
 };
 
+interface iEntity { id: string; name: string, visible: boolean };
+
 var items = [
   {
     id: '778d377b-5810-4727-b890-30efd6a8c342',
@@ -40,7 +42,7 @@ var items = [
     name: 'too',
     visible: true
   }
-] as Array<{ id: string; name: string, visible: boolean }>;
+] as Array<iEntity>;
 
 const ListTemplate: Story = (args, { updateArgs }) => ({
   components: { SwipeableList },
@@ -58,19 +60,11 @@ const ListTemplate: Story = (args, { updateArgs }) => ({
       items = args.handleDragged(items, args.dragged);
       updateArgs({ ...args, items });
     },
-
-    out<T extends {
-      id: string,
-      name: string,
-      visible: boolean
-    }>(args: {
-      outOfSightHandle: (i: Array<{
-        id: string,
-        name: string,
-        visible: boolean
-      }>, item: T
-      ) => Array<T>, item: T
+    out(args: {
+      outOfSightHandle: (items: Array<iEntity>, item: iEntity) => Array<iEntity>,
+      item: iEntity
     }) {
+      //console.log('out');
       // handle item here then call func to remove the item
       items = args.outOfSightHandle(items, args.item);
       updateArgs({ ...args, items });
