@@ -55,7 +55,7 @@ export default class SwipeableList extends Vue {
 
   //TODO: can these funcs be combined?
   draggedFunc = (
-    items: Array<{ id: string }>,
+    items: Array<{ id: string; name: string; visible: boolean }>,
     dragged: { direction: string; id: any }
   ) => {
     if (dragged.direction == "right" || dragged.direction == "left") {
@@ -64,13 +64,16 @@ export default class SwipeableList extends Vue {
         if (o.id === dragged.id) return { ...o, visible: false };
         return o;
       });
-      console.log(items);
       console.log("updated items");
+      console.log(items);
       return items;
     }
   };
 
-  outOfSightFunc = (items: Array<{ id: string }>, item: { id: string }) => {
+  outOfSightFunc = (
+    items: Array<{ id: string; name: string; visible: boolean }>,
+    item: { id: string }
+  ) => {
     console.log("outOfSight");
 
     items = items.filter((i) => i.id != item.id);
@@ -79,7 +82,7 @@ export default class SwipeableList extends Vue {
   };
 
   @Emit("outOfSight")
-  outOfSight(item: { id: string }) {
+  outOfSight(item: { id: string; name: string; visible: boolean }) {
     console.log(`remove item id: ${item.id}`);
     return { outOfSightHandle: this.outOfSightFunc, item };
   }

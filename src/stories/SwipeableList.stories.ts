@@ -53,34 +53,31 @@ const ListTemplate: Story = (args, { updateArgs }) => ({
       >
     </swipeable-list>`,
   methods: {
+    // Example of using an any type for the function
     dragged(args: { handleDragged: any, dragged: { direction: string, id: any } }) {
       items = args.handleDragged(items, args.dragged);
       updateArgs({ ...args, items });
     },
 
-    out(args: {
-      outOfSightHandle: any, item: {
-        id: string;
-      }
+    out<T extends {
+      id: string,
+      name: string,
+      visible: boolean
+    }>(args: {
+      outOfSightHandle: (i: Array<{
+        id: string,
+        name: string,
+        visible: boolean
+      }>, item: T
+      ) => Array<T>, item: T
     }) {
       // handle item here then call func to remove the item
-      items = args.outOfSightHandle(items, args.item) as {
-        id: string;
-        name: string;
-        visible: boolean;
-      }[];
+      items = args.outOfSightHandle(items, args.item);
       updateArgs({ ...args, items });
     }
   }
 });
 
-// outOfSight(item: { id: string }) {
-//   //console.log('outOfSight')
-//   items = items.filter((i) => i.id != item.id);
-//   //console.log(items);
-//   updateArgs({ ...args, items });
-// }
-// );
 
 export const List = ListTemplate.bind({});
 List.args = {
