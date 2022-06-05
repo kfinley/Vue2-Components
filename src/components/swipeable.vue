@@ -25,8 +25,8 @@ export interface InteractPosition {
 
 @Component
 export default class Swipeable extends Vue {
-
   isAnimating: Boolean = true;
+
   dragged: Boolean = false;
   position: InteractPosition = {
     x: 0,
@@ -38,20 +38,45 @@ export default class Swipeable extends Vue {
   @Prop({ default: false }) blockDragLeft!: Boolean;
   @Prop({ default: false }) blockDragRight!: Boolean;
   @Prop({ default: false }) blockDragUp!: Boolean;
-  @Prop({ default: 0 }) maxRotation!: number;
+  @Prop({ default: 15 }) maxRotation!: number;
   @Prop({ default: false }) lockXAxis!: Boolean;
   @Prop({ default: false }) lockYAxis!: Boolean;
   @Prop({ default: false }) lockSwipeDown!: Boolean;
   @Prop({ default: false }) lockSwipeLeft!: Boolean;
   @Prop({ default: false }) lockSwipeRight!: Boolean;
   @Prop({ default: false }) lockSwipeUp!: Boolean;
-  @Prop({ default: 500 }) outOfSightXCoordinate!: number;
+  @Prop({ default: 1000 }) outOfSightXCoordinate!: number;
   @Prop({ default: 1000 }) outOfSightYCoordinate!: number;
   @Prop({ default: 200 }) yThreshold!: number;
   @Prop({ default: 200 }) xThreshold!: number;
+  @Prop({ required: false })
+  item!: { id: string; name: string; visible: boolean };
+
+  outOfSight: boolean = false;
+
+  @Watch("item")
+  itemChanged() {
+    console.log("item changed...");
+
+    if (this.item.visible == false) {
+      setTimeout(() => {
+        console.log("remove item");
+        console.log(this.outOfSightXCoordinate);
+        this.outOfSight = true;
+        this.$emit("outOfSight", this.item);
+        this.dragged = false;
+        console.log(this.transformString);
+        this.resetPosition();
+        this.isAnimating = true;
+        console.log(this.opacityString);
+        this.resetElement();
+      }, 333);
+    } else {
+      console.log('item visible is true');
+    }
+  }
 
   mounted() {
-
     const element = this.$refs.interactElement as Interact.Target;
 
     interact(element).draggable({
@@ -77,9 +102,9 @@ export default class Swipeable extends Vue {
   }
 
   get transitionString() {
-    if (this.isAnimating)
-      return "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-
+    if (this.isAnimating && !this.outOfSight) {
+      return "transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+    }
     return null;
   }
 
@@ -92,7 +117,7 @@ export default class Swipeable extends Vue {
   @Emit("draggedDownComplete")
   draggedDown() {
     if (this.blockDragDown) {
-      this.resetCardPosition();
+      this.resetPosition();
       return;
     }
     this.unsetElement();
@@ -107,7 +132,7 @@ export default class Swipeable extends Vue {
   @Emit("draggedLeftComplete")
   draggedLeft() {
     if (this.blockDragLeft) {
-      this.resetCardPosition();
+      this.resetPosition();
       return;
     }
     this.unsetElement();
@@ -122,7 +147,7 @@ export default class Swipeable extends Vue {
   @Emit("draggedRightComplete")
   draggedRight() {
     if (this.blockDragRight) {
-      this.resetCardPosition();
+      this.resetPosition();
       return;
     }
     this.unsetElement();
@@ -137,7 +162,7 @@ export default class Swipeable extends Vue {
   @Emit("draggedUpComplete")
   draggedUp() {
     if (this.blockDragUp) {
-      this.resetCardPosition();
+      this.resetPosition();
       return;
     }
     this.unsetElement();
@@ -161,7 +186,17 @@ export default class Swipeable extends Vue {
     this.dragged = true;
   }
 
-  resetCardPosition() {
+  resetElement() {
+    const element = this.$refs.interactElement as Interact.Target;
+
+    interact(element).draggable({
+      onstart: this.onStart,
+      onmove: this.onMove,
+      onend: this.onEnd,
+    });
+  }
+
+  resetPosition() {
     this.setPosition({ x: 0, y: 0, rotation: 0 });
   }
 
@@ -170,6 +205,7 @@ export default class Swipeable extends Vue {
   }
 
   onMove(event: Interact.InteractEvent) {
+    this.outOfSight = false;
     let x = 0;
     let y = 0;
 
@@ -195,19 +231,22 @@ export default class Swipeable extends Vue {
     const { xThreshold, yThreshold } = this;
     this.isAnimating = true;
 
+    const element = this.$refs.interactElement as any;
+    const id = element.querySelector(".entity-wrapper")?.id;
+
     if (cardPositionX > xThreshold) {
       this.draggedRight();
-      return "right";
+      return { direction: "right", id };
     } else if (cardPositionX < -xThreshold) {
       this.draggedLeft();
-      return "left";
+      return { direction: "left", id };
     } else if (cardPositionY > yThreshold) {
       this.draggedDown();
-      return "down";
+      return { direction: "down", id };
     } else if (cardPositionY < -yThreshold) {
       this.draggedUp();
-      return "up";
-    } else this.resetCardPosition();
+      return { direction: "up", id };
+    } else this.resetPosition();
   }
 }
 </script>
