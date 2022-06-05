@@ -206,10 +206,7 @@ export default class Swipeable extends Vue {
     // Set the target z-index to a higher value than the last dropped element
     const zIndex = Math.ceil(new Date().getTime() / 1000).toString();
 
-    //const element = this.$refs.interactElement as Interact.Target;
-    event.currentTarget.style.zIndex = zIndex;
-
-    //event.style.zIndex = zIndex;
+    (event.currentTarget as any).style.zIndex = zIndex;
   }
 
   onMove(event: Interact.InteractEvent) {

@@ -97,5 +97,6 @@ export default class SwipeableList extends Vue {
 <style lang="scss" scoped>
 ul {
   list-style: none;
+  padding: 0;
 }
 </style>
