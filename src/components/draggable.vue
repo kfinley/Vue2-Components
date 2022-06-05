@@ -1,7 +1,6 @@
 <template>
   <div
     ref="interactElement"
-    :class="draggableClasses"
     :style="{
       transform: transformString,
       transition: transitionString,
@@ -81,10 +80,11 @@ export default class Draggable extends Vue implements DraggableProps {
 
   get draggableClasses() {
     //TODO: look into this....
-
+    return "draggable";
     const classes = { draggable: this.isDraggable, item: "true" };
     (classes as any)[`${this.type.toLowerCase()}-entity`] = true;
     return classes;
+
   }
 
   setPosition(coordinates: InteractPosition) {
@@ -185,8 +185,8 @@ export default class Draggable extends Vue implements DraggableProps {
 }
 </script>
 
-<style scoped>
-.item {
+<style lang="scss" scoped>
+div {
   touch-action: none;
   user-select: none;
 }

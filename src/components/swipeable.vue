@@ -256,4 +256,9 @@ export default class Swipeable extends Vue {
 .transparent {
   opacity: 0.5;
 }
+
+div {
+  touch-action: none;
+  user-select: none;
+}
 </style>
