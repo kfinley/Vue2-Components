@@ -1,25 +1,25 @@
 <template>
   <ul>
-    <swipeable
-      v-for="(item, index) in items"
-      :key="index"
-      :out-of-sight-x-coordinate="outOfSightXCoordinate"
-      :out-of-sight-y-coordinate="outOfSightYCoordinate"
-      :max-rotation="maxRotation"
-      :x-threshold="xThreshold"
-      :y-threshold="yThreshold"
-      @draggedComplete="draggedComplete"
-      @outOfSight="outOfSight"
-      :item="item"
-    >
-      <slot>
-        <li>
+    <li v-for="(item, index) in items" :key="index">
+      <swipeable
+        :out-of-sight-x-coordinate="outOfSightXCoordinate"
+        :out-of-sight-y-coordinate="outOfSightYCoordinate"
+        :max-rotation="maxRotation"
+        :x-threshold="xThreshold"
+        :y-threshold="yThreshold"
+        :blockDragDown="true"
+        :blockDragUp="true"
+        @draggedComplete="draggedComplete"
+        @outOfSight="outOfSight"
+        :item="item"
+      >
+        <slot>
           <card showClose="false">
             <entity :entity="item"> {{ item.id }} : {{ item.name }} </entity>
           </card>
-        </li>
-      </slot>
-    </swipeable>
+        </slot>
+      </swipeable>
+    </li>
   </ul>
 </template>
 

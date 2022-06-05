@@ -1,7 +1,7 @@
 <template>
   <div
     ref="interactElement"
-    :class="{ 'vue-interact-animated': isAnimating }"
+    :class="{ 'vue-interact': true, 'vue-interact-animated': isAnimating,  }"
     :style="{
       transform: transformString,
       transition: transitionString,
@@ -202,6 +202,18 @@ export default class Swipeable extends Vue {
 
   onStart(event: Interact.InteractEvent): void {
     this.isAnimating = false;
+
+    // Set the target z-index to a higher value than the last dropped element
+    const zIndex = Math.ceil(new Date().getTime() / 1000).toString();
+    console.log(zIndex);
+
+    //const element = this.$refs.interactElement as Interact.Target;
+    event.currentTarget.style.zIndex = zIndex;
+
+    console.log(event.currentTarget.style.zIndex);
+
+    console.log(event.currentTarget);
+    //event.style.zIndex = zIndex;
   }
 
   onMove(event: Interact.InteractEvent) {
@@ -257,7 +269,8 @@ export default class Swipeable extends Vue {
   opacity: 0.5;
 }
 
-div {
+.vue-interact {
+  position: relative;
   touch-action: none;
   user-select: none;
 }
