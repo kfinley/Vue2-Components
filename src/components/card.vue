@@ -4,7 +4,7 @@
       <div class="row mt-lg-n10 mt-md-n11 mt-n10">
         <div class="col">
           <div class="card z-index-0">
-            <div class="card-header text-center">
+            <div v-if="headerText !== null" class="card-header text-center">
               <button
                 type="button"
                 class="clickable btn-close mt-2 me-2"
@@ -39,7 +39,7 @@ export default class Card extends Vue {
   @Prop()
   cancel!: () => void;
 
-  @Prop()
+  @Prop( { default: null })
   headerText!: string;
 
   @Prop({ default: true })

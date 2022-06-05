@@ -34,7 +34,7 @@ export default {
   }
 };
 
-const Template = (args, { argTypes }) => ({
+const Template: Story = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { Button },
   template: `
