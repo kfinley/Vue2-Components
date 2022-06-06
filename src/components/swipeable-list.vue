@@ -15,7 +15,9 @@
       >
         <slot>
           <card showClose="false">
-            <entity :entity="item"> {{ item.id }} : {{ item.name }} </entity>
+            <entity :entity="item">
+              ID: {{ item.id }} <br/>
+              Name: {{ item.name }} </entity>
           </card>
         </slot>
       </swipeable>
@@ -53,7 +55,6 @@ export default class SwipeableList extends Vue {
     return { handleDragged: this.draggedFunc, dragged };
   }
 
-  //TODO: can these funcs be combined?
   draggedFunc = (
     items: Array<{ id: string; name: string; visible: boolean }>,
     dragged: { direction: string; id: any }
