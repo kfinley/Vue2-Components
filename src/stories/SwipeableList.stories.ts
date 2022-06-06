@@ -1,6 +1,6 @@
 import { Story } from '@storybook/vue/types-6-0';
 import SwipeableList from '@/components/swipeable-list.vue';
-
+import SwipeableEntity from '@/components/swipeable.vue';
 
 export default {
   title: 'Components/Controls/Swipeable',
@@ -8,8 +8,6 @@ export default {
     layout: 'centered'
   }
 };
-
-interface iEntity { id: string; name: string, visible: boolean };
 
 var items = [
   {
@@ -42,7 +40,7 @@ var items = [
     name: 'too',
     visible: true
   }
-] as Array<iEntity>;
+] as Array<SwipeableEntity>;
 
 const ListTemplate: Story = (args, { updateArgs }) => ({
   components: { SwipeableList },
@@ -61,8 +59,8 @@ const ListTemplate: Story = (args, { updateArgs }) => ({
       updateArgs({ ...args, items });
     },
     out(args: {
-      outOfSightHandle: (items: Array<iEntity>, item: iEntity) => Array<iEntity>,
-      item: iEntity
+      outOfSightHandle: (items: Array<SwipeableEntity>, item: SwipeableEntity) => Array<SwipeableEntity>,
+      item: SwipeableEntity
     }) {
       //console.log('out');
       // handle item here then call func to remove the item
@@ -72,8 +70,42 @@ const ListTemplate: Story = (args, { updateArgs }) => ({
   }
 });
 
+export const DefaultList = ListTemplate.bind({});
+DefaultList.args = {
+  items
+};
 
-export const List = ListTemplate.bind({});
-List.args = {
+const CardListTemplate: Story = (args, { updateArgs }) => ({
+  components: { SwipeableList },
+  props: Object.keys(args),
+  template:
+    `<swipeable-list
+      v-bind="$props"
+      @draggedComplete="dragged"
+      @outOfSight="out"
+      >
+       <template #card="{ entity }">
+        <h2>{{ entity.name }}</h2>
+      </template>
+    </swipeable-list>`,
+  methods: {
+    // Example of using an any type for the function
+    dragged(args: { handleDragged: any, dragged: { direction: string, id: any } }) {
+      items = args.handleDragged(items, args.dragged);
+      updateArgs({ ...args, items });
+    },
+    out(args: {
+      outOfSightHandle: (items: Array<SwipeableEntity>, item: SwipeableEntity) => Array<SwipeableEntity>,
+      item: SwipeableEntity
+    }) {
+      //console.log('out');
+      // handle item here then call func to remove the item
+      items = args.outOfSightHandle(items, args.item);
+      updateArgs({ ...args, items });
+    }
+  }
+});
+export const CardList = CardListTemplate.bind({});
+CardList.args = {
   items
 };

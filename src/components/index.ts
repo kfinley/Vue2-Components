@@ -14,6 +14,7 @@ import NotificationList from './notification-list.vue';
 import Toggle from './toggles/toggle.vue';
 import Spinner from './spinner.vue';
 import Swipeable from './swipeable.vue';
+import { SwipeableEntity } from './types';
 
 export {
   AnimatedNumber,
@@ -32,4 +33,5 @@ export {
   Toggle,
   Spinner,
   Swipeable,
+  SwipeableEntity
 };

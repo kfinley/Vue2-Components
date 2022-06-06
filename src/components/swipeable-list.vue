@@ -13,13 +13,23 @@
         @outOfSight="outOfSight"
         :item="item"
       >
-        <slot>
+        <div v-if="hasSlot('card')">
           <card showClose="false">
             <entity :entity="item">
-              ID: {{ item.id }} <br/>
-              Name: {{ item.name }} </entity>
+              <slot name="card" :entity="item"></slot>
+            </entity>
           </card>
-        </slot>
+        </div>
+        <div v-else>
+          <slot>
+            <card showClose="false">
+              <entity :entity="item">
+                ID: {{ item.id }} <br />
+                Name: {{ item.name }}
+              </entity>
+            </card>
+          </slot>
+        </div>
       </swipeable>
     </li>
   </ul>
@@ -49,6 +59,10 @@ export default class SwipeableList extends Vue {
   @Prop({ default: 15 }) maxRotation!: number;
   @Prop({ default: 1000 }) outOfSightXCoordinate!: number;
   @Prop({ default: 1000 }) outOfSightYCoordinate!: number;
+
+  hasSlot(name = "default") {
+    return !!this.$slots[name] || !!this.$scopedSlots[name];
+  }
 
   @Emit("draggedComplete")
   draggedComplete(dragged: { direction: string; id: any }) {
