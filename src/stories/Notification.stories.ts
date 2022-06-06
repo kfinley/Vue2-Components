@@ -2,7 +2,7 @@ import { Story } from '@storybook/vue/types-6-0';
 import Notification from "../components/notification.vue";
 
 export default {
-  title: 'Components/Notifications',
+  title: 'Components/Controls/Notifications',
   component: Notification,
   argTypes: {
     timed: {

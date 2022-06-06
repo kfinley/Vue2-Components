@@ -2,7 +2,7 @@ import { Story } from '@storybook/vue/types-6-0';
 import NotificationList from "../components/notification-list.vue";
 
 export default {
-  title: 'Components/Notifications',
+  title: 'Components/Controls/Notifications',
   component: NotificationList,
   argTypes: {
     notifications: {

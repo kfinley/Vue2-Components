@@ -2,7 +2,7 @@ import { Story } from '@storybook/vue/types-6-0';
 import Spinner from '../components/spinner.vue';
 
 export default {
-  title: 'Components/Controls/Spinners',
+  title: 'Components/Animated/Spinners',
   component: Spinner,
   parameters: {
     layout: 'centered'

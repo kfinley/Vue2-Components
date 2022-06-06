@@ -1,38 +1,40 @@
 <template>
-  <ul>
-    <li v-for="(item, index) in items" :key="index">
-      <swipeable
-        :out-of-sight-x-coordinate="outOfSightXCoordinate"
-        :out-of-sight-y-coordinate="outOfSightYCoordinate"
-        :max-rotation="maxRotation"
-        :x-threshold="xThreshold"
-        :y-threshold="yThreshold"
-        :blockDragDown="true"
-        :blockDragUp="true"
-        @draggedComplete="draggedComplete"
-        @outOfSight="outOfSight"
-        :item="item"
-      >
-        <div v-if="hasSlot('card')">
-          <card showClose="false">
-            <entity :entity="item">
-              <slot name="card" :entity="item"></slot>
-            </entity>
-          </card>
-        </div>
-        <div v-else>
-          <slot>
+  <div class="list">
+    <ul>
+      <li v-for="(item, index) in items" :key="index">
+        <swipeable
+          :out-of-sight-x-coordinate="outOfSightXCoordinate"
+          :out-of-sight-y-coordinate="outOfSightYCoordinate"
+          :max-rotation="maxRotation"
+          :x-threshold="xThreshold"
+          :y-threshold="yThreshold"
+          :blockDragDown="true"
+          :blockDragUp="true"
+          @draggedComplete="draggedComplete"
+          @outOfSight="outOfSight"
+          :item="item"
+        >
+          <div v-if="hasSlot('card')" class="card-slot">
             <card showClose="false">
               <entity :entity="item">
-                ID: {{ item.id }} <br />
-                Name: {{ item.name }}
+                <slot name="card" :entity="item"></slot>
               </entity>
             </card>
-          </slot>
-        </div>
-      </swipeable>
-    </li>
-  </ul>
+          </div>
+          <div v-else>
+            <slot>
+              <card showClose="false">
+                <entity :entity="item">
+                  ID: {{ item.id }} <br />
+                  Name: {{ item.name }}
+                </entity>
+              </card>
+            </slot>
+          </div>
+        </swipeable>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script lang="ts">
@@ -59,8 +61,42 @@ export default class SwipeableList extends Vue {
   @Prop({ default: 15 }) maxRotation!: number;
   @Prop({ default: 1000 }) outOfSightXCoordinate!: number;
   @Prop({ default: 1000 }) outOfSightYCoordinate!: number;
+  @Prop({ default: "75%" })
+  maxWidth!: string;
+
+  mounted() {
+    this.setMaxWidth();
+    this.setItemWidth();
+  }
+
+  appHeight = () =>
+    document.documentElement.style.setProperty(
+      "--app-height",
+      `${window.innerHeight}px`
+    );
+
+  appWidth = () =>
+    document.documentElement.style.setProperty(
+      "--app-width",
+      `${window.innerWidth}px`
+    );
+
+  setMaxWidth() {
+    document.documentElement.style.setProperty("--max-width", this.maxWidth);
+  }
+
+  setItemWidth() {
+    const maxWidthAsPixels =
+      window.innerWidth * (Number(this.maxWidth.replace("%", "")) * 0.01);
+    const itemWidthAsPixels = maxWidthAsPixels - maxWidthAsPixels * 0.2;
+    document.documentElement.style.setProperty(
+      "--item-width",
+      `${itemWidthAsPixels.toFixed(0).toString()}px`
+    );
+  }
 
   hasSlot(name = "default") {
+    //console.log(this.$scopedSlots);
     return !!this.$slots[name] || !!this.$scopedSlots[name];
   }
 
@@ -110,8 +146,18 @@ export default class SwipeableList extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.list {
+  display: flex;
+  justify-content: center;
+}
+
 ul {
   list-style: none;
   padding: 0;
+  max-width: var(--max-width);
+}
+
+.card-slot {
+  width: var(--item-width);
 }
 </style>
