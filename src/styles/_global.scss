@@ -132,3 +132,9 @@ h6 {
     transform: translateY(3px);
   }
 }
+
+//This is here in order to center modal header slot content. Figure out a better way to do this.
+.modal-header > div {
+  width: 100%;
+  text-align: center;
+}

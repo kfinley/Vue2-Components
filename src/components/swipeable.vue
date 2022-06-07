@@ -7,7 +7,6 @@
       transition: transitionString,
       opacity: opacityString,
     }"
-    @dblclick="doubleClick"
   >
     <slot />
   </div>
@@ -55,9 +54,44 @@ export default class Swipeable extends Vue {
 
   outOfSight: boolean = false;
 
-  @Emit("doubleClick")
-  doubleClick(e: any) {
-    return e;
+  mounted() {
+    const element = this.$refs.interactElement as Interact.Target;
+
+    interact(element).draggable({
+      onstart: this.onStart,
+      onmove: this.onMove,
+      onend: this.onEnd,
+    });
+
+    this.$el.addEventListener("click", this.makeDoubleClick(), false);
+  }
+
+  beforeDestroy() {
+    const element = this.$refs.interactElement as Interact.Target;
+    interact(element).unset();
+  }
+
+  makeDoubleClick(doubleClickCallback?: any, singleClickCallback?: any) {
+    var clicks = 0,
+      timeout;
+    const t = this;
+    return function () {
+      clicks++;
+      if (clicks == 1) {
+        singleClickCallback && singleClickCallback.apply(this, arguments);
+        // console.log("single click");
+        t.$emit("click");
+        timeout = setTimeout(function () {
+          clicks = 0;
+        }, 400);
+      } else {
+        timeout && clearTimeout(timeout);
+        // console.log("double click");
+        t.$emit("doubleClick");
+        doubleClickCallback && doubleClickCallback.apply(this, arguments);
+        clicks = 0;
+      }
+    };
   }
 
   @Watch("item")
@@ -80,21 +114,6 @@ export default class Swipeable extends Vue {
     } else {
       //console.log("item visible is true");
     }
-  }
-
-  mounted() {
-    const element = this.$refs.interactElement as Interact.Target;
-
-    interact(element).draggable({
-      onstart: this.onStart,
-      onmove: this.onMove,
-      onend: this.onEnd,
-    });
-  }
-
-  beforeDestroy() {
-    const element = this.$refs.interactElement as Interact.Target;
-    interact(element).unset();
   }
 
   // computed:
