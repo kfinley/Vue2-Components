@@ -13,6 +13,7 @@
           @draggedComplete="draggedComplete"
           @outOfSight="outOfSight"
           :item="item"
+          @doubleClick="doubleClick(item)"
         >
           <div v-if="hasSlot('card')" class="card-slot">
             <card showClose="false">
@@ -24,7 +25,7 @@
           <div v-else>
             <slot>
               <card showClose="false">
-                <entity :entity="item">
+                <entity :entity="item" @dblClick="dblClick(item)">
                   ID: {{ item.id }} <br />
                   Name: {{ item.name }}
                 </entity>
@@ -63,6 +64,9 @@ export default class SwipeableList extends Vue {
   @Prop({ default: 1000 }) outOfSightYCoordinate!: number;
   @Prop({ default: "75%" })
   maxWidth!: string;
+
+  @Prop()
+  doubleClick!: Function;
 
   mounted() {
     this.setMaxWidth();

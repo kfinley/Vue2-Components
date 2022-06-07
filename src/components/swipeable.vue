@@ -7,6 +7,7 @@
       transition: transitionString,
       opacity: opacityString,
     }"
+    @dblclick="doubleClick"
   >
     <slot />
   </div>
@@ -53,6 +54,11 @@ export default class Swipeable extends Vue {
   item!: { id: string; name: string; visible: boolean };
 
   outOfSight: boolean = false;
+
+  @Emit("doubleClick")
+  doubleClick(e: any) {
+    return e;
+  }
 
   @Watch("item")
   itemChanged() {
