@@ -39,7 +39,7 @@ export default class FlatModal extends Modal {}
 </script>
 
 <style lang="scss" scoped>
-@import "./modal.scss";
+@import "../styles/modal.scss";
 
 // Override default modal css to make the window more flat
 .modal-container {

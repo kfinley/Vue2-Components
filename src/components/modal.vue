@@ -55,5 +55,5 @@ export default class Modal extends Vue {
 
 
 <style lang="scss" scoped>
-@import "./modal.scss";
+@import "../styles/modal.scss";
 </style>
