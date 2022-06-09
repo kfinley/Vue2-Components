@@ -1,5 +1,10 @@
 <template>
-  <a class="btn clickable" :class="joinClasses" :href="link" @click="clickGetter">
+  <a
+    class="btn clickable"
+    :class="joinClasses"
+    :href="link"
+    @click="$emit('click')"
+  >
     <slot></slot>
   </a>
 </template>
@@ -15,24 +20,13 @@ export default class Button extends Vue {
   @Prop({ required: false })
   link!: string;
 
-  @Prop({ required: false })
-  clickEvent!: Function;
-
   get joinClasses() {
     return this.classes?.join(" ");
-  }
-
-  get clickGetter() {
-    if (typeof this.clickEvent === "function") {
-      return this.clickEvent;
-    }
-    return () => {};
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
 .btn {
   transition: all 400ms ease;
   background-color: $color--primary;
