@@ -27,7 +27,7 @@ export default {
 const Template: Story = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { Notification },
-  template: '<notification v-bind="$props">{{ message }}</notification>'
+  template: '<notification v-bind="$props"/>'
 });
 
 export const Success = Template.bind({});

@@ -1,9 +1,7 @@
 <template>
   <div class="notification-list">
     <div v-for="(note, index) in notifications" :key="index">
-      <notification :type="note.type" :timed="note.timed">
-        {{ note.message }}
-      </notification>
+      <notification :type="note.type" :timed="note.timed" :message="note.message" />
     </div>
   </div>
 </template>

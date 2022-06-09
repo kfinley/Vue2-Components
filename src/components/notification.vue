@@ -3,7 +3,7 @@
     <div class="notification" v-if="!loading && !isClosed">
       <div class="content-column">
         <div :class="['notification--message', determineNotificationClass]">
-          <slot></slot>
+          {{ message }}
           <div class="notification--close" @click="close">
             <i class="material-icons">close</i>
           </div>
@@ -14,46 +14,67 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 
 @Component({})
 export default class Notification extends Vue {
   @Prop({ default: false })
   timed!: boolean;
 
-  @Prop()
-  message!: string;
-
   @Prop({ required: false })
   type!: "alert" | "error" | "success";
 
+  @Prop()
+  message!: string;
+
+  @Prop({default: 5})
+  delay!: number;
+
   loading = true;
   isClosed = false;
-  timedClose!: number;
+  timedClose!: NodeJS.Timeout;
+
+  created() {
+    this.setupTimed();
+  }
+
+  mounted() {
+    this.loading = false;
+  }
+
+  beforeDestroy() {
+    console.log("beforeDestroy");
+    clearTimeout(this.timedClose);
+  }
+
+  @Watch("message")
+  messageChanged() {
+    console.log("messageChanged");
+    if (this.message != "") {
+      this.setupTimed();
+      this.isClosed = false;
+    }
+  }
+
+  get determineNotificationClass() {
+    return "notification--message--" + this.type;
+  }
 
   close() {
     this.isClosed = true;
     this.$emit("notification-closed", "");
   }
-  get determineNotificationClass() {
-    return "notification--message--" + this.type;
-  }
-  created() {
+
+  setupTimed() {
     if (this.timed) {
-      this.timedClose = setTimeout(this.close, 5000);
+      console.log("setupTimed");
+      this.timedClose = setTimeout(this.close, this.delay * 1000);
     }
-  }
-  beforeDestroy() {
-    clearTimeout(this.timedClose);
-  }
-  mounted() {
-    this.loading = false;
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
 .notification {
   font-family: $font-family;
   font-size: 15px;

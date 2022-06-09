@@ -16,7 +16,7 @@ const Template: Story = (args, { argTypes }) => ({
   components: {
     NotificationList
   },
-  template: '<Notification-list v-bind="$props"></Notification-list>'
+  template: '<Notification-list v-bind="$props"/>'
 });
 
 export const List = Template.bind({});
