@@ -1,6 +1,6 @@
 <template>
-  <transition name="modal">
-    <div class="modal-mask">
+  <transition name="modal" >
+    <div class="modal-mask" ref="modal">
       <div class="modal-wrapper">
         <div class="modal-container">
           <div>
@@ -36,7 +36,15 @@ import Button from "./buttons/button.vue";
     Button,
   },
 })
-export default class Modal extends Vue {}
+export default class Modal extends Vue {
+
+  mounted() {
+
+    const zIndex = Math.ceil(new Date().getTime() / 1000).toString();
+    console.log(this.$refs.modal);
+    (this.$refs.modal as any).style.zIndex = zIndex;
+  }
+}
 </script>
 
 
