@@ -43,6 +43,7 @@ import { Component, Prop, Emit, Vue, Watch } from "vue-property-decorator";
 import Swipeable from "./swipeable.vue";
 import Entity from "./entity.vue";
 import Card from "./card.vue";
+import { setAppHeight, setAppWidth } from "../utils";
 
 @Component({
   components: {
@@ -65,34 +66,29 @@ export default class SwipeableList extends Vue {
   @Prop({ default: "75%" })
   maxWidth!: string;
 
-  @Emit('doubleClicked')
-  doubleClicked(entity){
-    console.log('doubleClicked');
+  @Emit("doubleClicked")
+  doubleClicked(entity) {
+    console.log("doubleClicked");
     console.log(entity);
     return entity;
   }
 
   mounted() {
+
+    //TODO: refactor...
+    setAppHeight();
+    setAppWidth();
+
     this.setMaxWidth();
     this.setItemWidth();
   }
 
-  appHeight = () =>
-    document.documentElement.style.setProperty(
-      "--app-height",
-      `${window.innerHeight}px`
-    );
-
-  appWidth = () =>
-    document.documentElement.style.setProperty(
-      "--app-width",
-      `${window.innerWidth}px`
-    );
-
+  //TODO: refactor this.. We'll have more than on item type on a page that may need this set.
   setMaxWidth() {
     document.documentElement.style.setProperty("--max-width", this.maxWidth);
   }
 
+  //TODO: refactor this.. We'll have more than on item type on a page that may need this set.
   setItemWidth() {
     const maxWidthAsPixels =
       window.innerWidth * (Number(this.maxWidth.replace("%", "")) * 0.01);
