@@ -8,6 +8,11 @@
     "build-storybook": "build-storybook",
     "deploy-storybook": "storybook-to-ghpages"
   },
+  "dependencies": {
+    "interactjs": "^1.10.11",
+    "v-click-outside": "^3.2.0",
+    "vee-validate": "^3.4.14"
+  },
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@storybook/addon-actions": "^6.4.19",
@@ -59,8 +64,5 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ],
-  "dependencies": {
-    "interactjs": "^1.10.11"
-  }
+  ]
 }

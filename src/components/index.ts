@@ -15,6 +15,7 @@ import Toggle from './toggles/toggle.vue';
 import Spinner from './spinner.vue';
 import Swipeable from './swipeable.vue';
 import { SwipeableEntity } from './types';
+import ValidInput from './validation/valid-input.vue';
 
 export {
   AnimatedNumber,
@@ -30,8 +31,9 @@ export {
   FlatToggle,
   Notification,
   NotificationList,
-  Toggle,
   Spinner,
   Swipeable,
-  SwipeableEntity
+  SwipeableEntity,
+  Toggle,
+  ValidInput
 };
