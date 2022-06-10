@@ -1,7 +1,5 @@
 import { Story } from '@storybook/vue/types-6-0';
 import ValidInput from '../components/validation/valid-input.vue';
-import Button from '@/components/buttons/button.vue';
-import { ValidationObserver } from "vee-validate";
 
 export default {
   title: 'Components/Inputs/Valid Input',
