@@ -13,7 +13,7 @@ export default {
 
 const Template: Story = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { ValidationObserver, ValidInput, Button },
+  components: { ValidInput },
   template: '<valid-input v-bind="$props" v-model="model.email"/>'
 });
 
