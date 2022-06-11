@@ -1,5 +1,6 @@
 import { Story } from '@storybook/vue/types-6-0';
 import TypeAhead from '../components/type-ahead.vue';
+import { states } from '@/data';
 
 export default {
   title: 'Components/Inputs/Type Ahead',
@@ -9,25 +10,32 @@ export default {
   }
 };
 
+
 const Template: Story = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { TypeAhead },
-  template: '<type-ahead v-bind="$props" v-model="model.state"/>'
+  template: '<type-ahead v-bind="$props" @input-typed="logInput" v-model="model.state"/>',
+  methods: {
+    logInput: (text) => console.log(text)
+  }
 });
 
-function onSelect(item: string){
-  window.alert(item);
+let model: Record<string, string> = {
+  name: '',
+  email: '',
+  state: ''
+};
+
+function onSelect(item: string) {
+  model.state = item;
 }
+
 export const Default = Template.bind({});
 Default.args = {
+  model,
   rules: 'required',
-  placeholder: 'Select a state...',
+  placeholder: 'Type a state...',
   name: "state",
-  src: 'https://some.fake.url.com/states',
   onSelect,
-  model: {
-    name: null,
-    email: null,
-    state: null
-  }
+  items: Object.values(states),
 };

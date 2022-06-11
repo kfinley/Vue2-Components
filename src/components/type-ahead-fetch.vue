@@ -25,7 +25,7 @@
         aria-labelledby="dropdownMenu"
       >
         <li
-          v-for="(item, index) in currentItems"
+          v-for="(item, index) in items"
           :class="{ active: activeClass(index) }"
           :key="'li' + index"
           @click.prevent="select"
@@ -58,7 +58,7 @@
 
 <script lang="ts">
 // Adapted from: https://github.com/mizuka-wu/vue2-typeahead
-import { Component, Vue, Ref, Prop, Watch, Emit } from "vue-property-decorator";
+import { Component, Vue, Ref, Prop, Watch } from "vue-property-decorator";
 import vClickOutside from "v-click-outside";
 import ValidInput from "./validation/valid-input.vue";
 
@@ -75,6 +75,7 @@ function escapeRegExp(str) {
   },
 })
 export default class TypeAhead extends Vue {
+  items = [];
   query = "";
   current = -1;
   loading = false;
@@ -87,11 +88,17 @@ export default class TypeAhead extends Vue {
   @Prop({ default: false })
   selectFirst!: boolean;
 
+  @Prop({ default: ":keyword" })
+  queryParamName!: string;
+
   @Prop({ default: 10 })
   limit!: number;
 
   @Prop({ default: 3 })
   minChars!: number;
+
+  @Prop()
+  src!: string;
 
   @Prop({ default: 500 })
   delayTime!: number;
@@ -102,7 +109,7 @@ export default class TypeAhead extends Vue {
   @Prop({ default: true })
   showSearchingFlag!: boolean;
 
-  @Prop({ default: "No results" })
+  @Prop({ default: "No result" })
   noResultText!: string;
 
   @Prop({ default: "Searching..." })
@@ -118,13 +125,22 @@ export default class TypeAhead extends Vue {
   @Prop({ default: TypeAhead.onSelectFunc })
   onSelect: Function;
 
+  @Prop({ default: TypeAhead.highlightingFunc })
+  highlighting: Function;
+
   @Prop()
   render!: Function;
 
   @Prop()
-  items!: Array<object>;
+  getResponse!: Function;
 
-  currentItems!: Array<object>;
+  @Prop({
+    default: TypeAhead.fetchFunc,
+  })
+  fetch!: (url: string) => Promise<void>;
+
+  @Prop()
+  objectArray!: Array<object>;
 
   @Prop()
   rules!: string;
@@ -138,10 +154,9 @@ export default class TypeAhead extends Vue {
   mounted() {
     this.query = this.value;
 
-    if (this.items) {
-      this.currentItems = this.items.sort();
+    if (this.objectArray) {
+      this.objectArray.sort();
     }
-    console.log(this.currentItems);
   }
 
   @Watch("value")
@@ -159,20 +174,25 @@ export default class TypeAhead extends Vue {
   }
 
   get hasItems() {
-    return this.currentItems.length > 0;
+    return this.items.length > 0;
   }
 
   get isEmpty() {
     return this.query === "";
   }
 
+  static fetchFunc(url: string): Promise<void> {
+    if (url !== undefined) console.log(`TypeAhead: Fetch called for ${url}`);
+    return;
+  }
+
   renderFunc(items) {
     return items;
   }
 
-  highlighting(item, instance) {
-    // console.log(item);
-    // console.log(instance);
+  static highlightingFunc(item, instance) {
+    console.log(item);
+    console.log(instance);
     if (item !== undefined && instance !== undefined) {
       var re = new RegExp(escapeRegExp(instance.query), "ig");
       var matches = item.match(re);
@@ -187,31 +207,23 @@ export default class TypeAhead extends Vue {
   }
 
   static onSelectFunc(item, vue) {
-    console.log("onSelectFunc");
-    console.log(item);
     vue.query = item;
   }
 
   select() {
     if (this.current !== -1) {
-      const item = this.currentItems[this.current];
+      const item = this.items[this.current];
       this.onSelect(item, this);
     }
     this.reset(false);
   }
 
-  //TODO: rename to filterItemsUsingQuery
   objectUpdate() {
-    var filtered = this.currentItems.filter((entity) =>
+    var filtered = this.objectArray.filter((entity) =>
       (entity as any).toLowerCase().includes(this.query.toLowerCase())
     );
-
-    //TODO: refactor.... should be able to remove this.data
     this.data = this.limit ? filtered.slice(0, this.limit) : filtered;
-
-    const render = this.render ? this.render : this.renderFunc;
-
-    this.currentItems = render(
+    this.items = this.render(
       this.limit ? this.data.slice(0, this.limit) : this.data,
       this
     );
@@ -223,14 +235,11 @@ export default class TypeAhead extends Vue {
     }
   }
 
-  update(input: string) {
-    console.log(input);
+  update(event) {
     const eventTimeStamp = event.timeStamp ?? Date.now();
     this.lastTime = eventTimeStamp;
     if (!this.query) {
-      this.reset();
-      //TODO: refactor... code smell...
-      return;
+      return this.reset();
     }
 
     if (this.minChars && this.query.length < this.minChars) {
@@ -239,18 +248,36 @@ export default class TypeAhead extends Vue {
 
     setTimeout(() => {
       if (this.lastTime - eventTimeStamp === 0) {
+        if (this.objectArray) {
+          return this.objectUpdate();
+        }
+
         this.loading = true;
         this.showResult = true;
 
-        //TODO: refactor to make this async
-        this.objectUpdate();
+        const re = new RegExp(this.queryParamName, "g");
 
-        this.current = -1;
-        this.loading = false;
+        this.fetch &&
+          this.fetch(this.src.replace(re, encodeURIComponent(this.query))).then(
+            (response) => {
+              if (this.query) {
+                let data = this.getResponse(response);
+                this.data = this.limit ? data.slice(0, this.limit) : data;
+                const render = this.render ? this.render : this.renderFunc;
+                this.items = render(
+                  this.limit ? data.slice(0, this.limit) : data,
+                  this
+                );
 
-        if (this.selectFirst) {
-          this.down();
-        }
+                this.current = -1;
+                this.loading = false;
+
+                if (this.selectFirst) {
+                  this.down();
+                }
+              }
+            }
+          );
       }
     }, this.delayTime);
   }
@@ -288,8 +315,7 @@ export default class TypeAhead extends Vue {
   }
 
   reset(emit: boolean = true) {
-    // this.currentItems = [];
-    this.currentItems = this.items.sort();
+    this.items = [];
     this.loading = false;
     this.showResult = false;
     if (emit) {
