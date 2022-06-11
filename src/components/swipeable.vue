@@ -71,6 +71,7 @@ export default class Swipeable extends Vue {
     interact(element).unset();
   }
 
+  // ht: https://stackoverflow.com/a/46812691
   makeDoubleClick(doubleClickCallback?: any, singleClickCallback?: any) {
     var clicks = 0,
       timeout;
