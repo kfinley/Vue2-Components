@@ -18,6 +18,7 @@
       @keydown.up="$emit('up')"
       @keydown.enter.prevent="$emit('select')"
       @keydown.esc="$emit('reset')"
+      v-on:focus="$emit('focus')"
     />
     <div v-show="errors[0]" class="invalid-feedback">
       {{ errors[0] }}

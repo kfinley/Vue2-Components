@@ -16,6 +16,7 @@
       @select="select"
       @reset="reset"
       @input="update($event)"
+      v-on:focus="$emit('focus')"
     />
     <div class="typeahead-dropdown-container" v-if="showResult">
       <ul
@@ -58,7 +59,7 @@
 
 <script lang="ts">
 // Adapted from: https://github.com/mizuka-wu/vue2-typeahead
-import { Component, Vue, Ref, Prop, Watch } from "vue-property-decorator";
+import { Component, Vue, Ref, Prop, Emit, Watch } from "vue-property-decorator";
 import vClickOutside from "v-click-outside";
 import ValidInput from "./validation/valid-input.vue";
 
@@ -218,6 +219,7 @@ export default class TypeAhead extends Vue {
       const item = this.currentItems[this.current];
       const select = this.onSelect ? this.onSelect : TypeAhead.onSelectFunc;
       select(item, this);
+      this.$emit('select', item);
     }
     this.reset(false);
   }
