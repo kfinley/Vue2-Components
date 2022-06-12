@@ -58,7 +58,7 @@
 
 <script lang="ts">
 // Adapted from: https://github.com/mizuka-wu/vue2-typeahead
-import { Component, Vue, Ref, Prop, Watch, Emit } from "vue-property-decorator";
+import { Component, Vue, Ref, Prop, Watch } from "vue-property-decorator";
 import vClickOutside from "v-click-outside";
 import ValidInput from "./validation/valid-input.vue";
 
@@ -115,8 +115,8 @@ export default class TypeAhead extends Vue {
   @Prop({ default: "" })
   value!: string;
 
-  @Prop({ default: TypeAhead.onSelectFunc })
-  onSelect: Function;
+  @Prop()
+  onSelect!: Function;
 
   @Prop()
   render!: Function;
@@ -134,6 +134,9 @@ export default class TypeAhead extends Vue {
 
   @Prop()
   name: string;
+
+  @Prop({ default: "name" })
+  queryPropertyName!: string;
 
   mounted() {
     this.query = this.value;
@@ -175,36 +178,61 @@ export default class TypeAhead extends Vue {
     // console.log(instance);
     if (item !== undefined && instance !== undefined) {
       var re = new RegExp(escapeRegExp(instance.query), "ig");
-      var matches = item.match(re);
+
+      let matches: any;
+
+      if (typeof item === "object") {
+        matches = item[this.queryPropertyName].match(re);
+      } else {
+        matches = item.match(re);
+      }
 
       matches &&
         matches.forEach((match) => {
-          item = item.replace(match, `<b>${match}</b>`);
+          if (typeof item === "object") {
+            item = item[this.queryPropertyName].replace(
+              match,
+              `<b>${match}</b>`
+            );
+          } else {
+            item = item.replace(match, `<b>${match}</b>`);
+          }
         });
     }
 
     return item;
   }
 
-  static onSelectFunc(item, vue) {
+  static onSelectFunc(item, instance) {
     console.log("onSelectFunc");
     console.log(item);
-    vue.query = item;
+    if (typeof item === "object") {
+      instance.query = item[instance.queryPropertyName];
+    } else {
+      instance.query = item;
+    }
   }
 
   select() {
     if (this.current !== -1) {
       const item = this.currentItems[this.current];
-      this.onSelect(item, this);
+      const select = this.onSelect ? this.onSelect : TypeAhead.onSelectFunc;
+      select(item, this);
     }
     this.reset(false);
   }
 
   //TODO: rename to filterItemsUsingQuery
   objectUpdate() {
-    var filtered = this.currentItems.filter((entity) =>
-      (entity as any).toLowerCase().includes(this.query.toLowerCase())
-    );
+    var filtered = this.currentItems.filter((entity) => {
+      if (typeof entity === "object") {
+        return entity[this.queryPropertyName]
+          .toLowerCase()
+          .includes(this.query.toLowerCase());
+      } else {
+        return (entity as any).toLowerCase().includes(this.query.toLowerCase());
+      }
+    });
 
     //TODO: refactor.... should be able to remove this.data
     this.data = this.limit ? filtered.slice(0, this.limit) : filtered;
