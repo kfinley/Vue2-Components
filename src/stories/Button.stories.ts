@@ -44,71 +44,36 @@ const Template: Story = (args, { argTypes }) => ({
 export const Default = Template.bind({});
 Default.args = {
   label: "Submit",
-  classes: [],
-  link: null,
-  clickEvent: () => { }
-}
-
-export const Wide = Template.bind({});
-Wide.args = {
-  label: "Submit",
-  classes: ["btn--wide"],
-  link: null,
-  clickEvent: () => { }
+  classes: []
 }
 
 export const Cancel = Template.bind({});
 Cancel.args = {
   label: "Cancel",
   classes: ['btn--cancel'],
-  link: null,
-  clickEvent: () => { }
 }
 
 export const Delete = Template.bind({});
 Delete.args = {
   label: "Delete",
-  classes: ['btn--delete'],
-  link: null,
-  clickEvent: () => { }
+  classes: ['btn--delete']
 }
 
 export const DeleteSolid = Template.bind({});
 DeleteSolid.args = {
   label: "Delete Solid",
   classes: ['btn--delete-solid'],
-  link: null,
-  clickEvent: () => { }
 }
 
 export const HoverFill = Template.bind({});
 HoverFill.args = {
   label: "Hover Fill",
-  classes: ['btn--hover-fill'],
-  link: null,
-  clickEvent: () => { }
+  classes: ['btn--hover-fill']
 }
 
-export const White = Template.bind({});
-White.args = {
-  label: "White",
-  classes: ['btn--white'],
-  link: null,
-  clickEvent: () => { }
-}
-
-export const WhiteHoverDisplay = Template.bind({});
-WhiteHoverDisplay.args = {
+export const HoverDisplay = Template.bind({});
+HoverDisplay.args = {
   label: "White Hover Display",
-  classes: ['btn--white-hover-display'],
-  link: null,
-  clickEvent: () => { }
+  classes: ['btn--white-hover-display']
 }
 
-export const GreyHoverFill = Template.bind({});
-GreyHoverFill.args = {
-  label: "Grey Hover Fill",
-  classes: ['btn--grey-hover-fill'],
-  link: null,
-  clickEvent: () => { }
-}
