@@ -1,6 +1,12 @@
 <template>
   <div>
     <slot> </slot>
+    <div v-if="!!this.$scopedSlots.expand">
+      <slot name="expand"></slot>
+      <div v-for="(prop, index) in Object.keys(entity)" :key="index">
+        <div>{{ prop }}: {{ entity[prop] }}</div>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
