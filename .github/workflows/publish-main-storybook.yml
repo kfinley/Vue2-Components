@@ -29,8 +29,10 @@ jobs:
           npm install silent
 
       - name: Run unit tests
-        run: npm run test:unit
-        
+        run: |
+          cd $GITHUB_WORKSPACE/main
+          npm run test:unit
+
       - name: Build Storybook
         run: |
           cd $GITHUB_WORKSPACE/main
