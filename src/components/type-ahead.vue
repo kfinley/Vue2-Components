@@ -17,6 +17,8 @@
       @reset="reset"
       @input="update($event)"
       v-on:focus="$emit('focus')"
+      v-on:focusin="$emit('focusin')"
+      v-on:focusout="$emit('focusout')"
     />
     <div class="typeahead-dropdown-container" v-if="showResult">
       <ul
@@ -219,7 +221,7 @@ export default class TypeAhead extends Vue {
       const item = this.currentItems[this.current];
       const select = this.onSelect ? this.onSelect : TypeAhead.onSelectFunc;
       select(item, this);
-      this.$emit('select', item);
+      this.$emit("select", item);
     }
     this.reset(false);
   }
@@ -253,12 +255,17 @@ export default class TypeAhead extends Vue {
     }
   }
 
+  @Emit("update")
   update(input: string) {
     console.log(input);
+
     const eventTimeStamp = event.timeStamp ?? Date.now();
     this.lastTime = eventTimeStamp;
     if (!this.query) {
-      this.reset();
+      // this.reset();
+      this.loading = false;
+      this.showResult = false;
+      // this.showResult = false;
       //TODO: refactor... code smell...
       return;
     }
@@ -283,6 +290,8 @@ export default class TypeAhead extends Vue {
         }
       }
     }, this.delayTime);
+
+    return input;
   }
 
   setActive(index) {
@@ -325,6 +334,10 @@ export default class TypeAhead extends Vue {
     if (emit) {
       this.$emit("reset", this);
     }
+  }
+
+  log(text) {
+    console.log(text);
   }
 }
 </script>

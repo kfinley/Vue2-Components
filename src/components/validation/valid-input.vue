@@ -19,6 +19,8 @@
       @keydown.enter.prevent="$emit('select')"
       @keydown.esc="$emit('reset')"
       v-on:focus="$emit('focus')"
+      v-on:focusin="$emit('focusin')"
+      v-on:focusout="$emit('focusout')"
     />
     <div v-show="errors[0]" class="invalid-feedback">
       {{ errors[0] }}
@@ -72,6 +74,10 @@ export default class ValidInput extends Vue {
     if (this.focus) {
       (this.element as any).focus();
     }
+  }
+
+  log(text) {
+    console.log(text);
   }
 }
 </script>
