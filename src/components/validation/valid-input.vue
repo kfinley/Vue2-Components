@@ -75,10 +75,6 @@ export default class ValidInput extends Vue {
       (this.element as any).focus();
     }
   }
-
-  log(text) {
-    console.log(text);
-  }
 }
 </script>
 

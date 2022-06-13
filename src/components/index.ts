@@ -11,13 +11,14 @@ import FlatModal from './flat-modal.vue';
 import FlatToggle from './toggles/flat-toggle.vue';
 import Notification from './notification.vue';
 import NotificationList from './notification-list.vue';
-import Toggle from './toggles/toggle.vue';
 import Spinner from './spinner.vue';
 import Swipeable from './swipeable.vue';
-import { SwipeableEntity } from './types';
+// import { SwipeableEntity } from './types';
+import Toggle from './toggles/toggle.vue';
+import TypeAhead from './type-ahead.vue';
 import ValidInput from './validation/valid-input.vue';
 
-export {
+export default {
   AnimatedNumber,
   BubbleButton,
   BubbleButtonBanner,
@@ -33,7 +34,8 @@ export {
   NotificationList,
   Spinner,
   Swipeable,
-  SwipeableEntity,
+  // SwipeableEntity,
   Toggle,
+  TypeAhead,
   ValidInput
 };
