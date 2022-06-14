@@ -14,9 +14,9 @@ export default {
 const Template: Story = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { TypeAhead },
-  template: '<type-ahead v-bind="$props" @input-typed="logInput" v-model="model.state"/>',
+  template: '<type-ahead v-bind="$props" @update="log" v-model="model.state"/>',
   methods: {
-    logInput: (text) => console.log(text)
+    log: (text) => console.log(text)
   }
 });
 

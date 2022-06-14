@@ -29,7 +29,7 @@
       >
         <li
           v-for="(item, index) in currentItems"
-          :class="{ active: activeClass(index) }"
+          :class="{ active: isActive(index) }"
           :key="'li' + index"
           @click.prevent="select"
           @mousemove="setActive(index)"
@@ -86,9 +86,6 @@ export default class TypeAhead extends Vue {
   showResult = false;
 
   @Ref() readonly input!: HTMLInputElement;
-
-  @Prop({ default: false })
-  selectFirst!: boolean;
 
   @Prop({ default: 10 })
   limit!: number;
@@ -147,7 +144,7 @@ export default class TypeAhead extends Vue {
     if (this.items) {
       this.currentItems = this.items.sort();
     }
-    console.log(this.currentItems);
+    //console.log(this.currentItems);
   }
 
   @Watch("value")
@@ -156,9 +153,8 @@ export default class TypeAhead extends Vue {
   }
 
   @Watch("query")
-  onQueryChanged(value) {
-    this.$emit("input", value);
-  }
+  @Emit("input")
+  onQueryChanged() {}
 
   get vue() {
     return this;
@@ -206,9 +202,13 @@ export default class TypeAhead extends Vue {
     return item;
   }
 
+  isActive(index) {
+    return this.current === index;
+  }
+
   static onSelectFunc(item, instance) {
-    console.log("onSelectFunc");
-    console.log(item);
+    // console.log("onSelectFunc");
+    // console.log(item);
     if (typeof item === "object") {
       instance.query = item[instance.queryPropertyName];
     } else {
@@ -250,16 +250,15 @@ export default class TypeAhead extends Vue {
 
     this.current = -1;
 
-    if (this.selectFirst) {
-      this.down();
-    }
   }
 
-  @Emit("update")
+  // TODO: Code comments left for now... cleanup soon
+  // @Emit("update") // Not using @Emit b/c we want to conditionally emit and it doesn't support that.
   update(input: string) {
-    console.log(input);
+    // Debugging code intentionally left in place....
+    //console.log(input);
 
-    const eventTimeStamp = event.timeStamp ?? Date.now();
+    const eventTimeStamp = Date.now(); // event.timeStamp ?? Date.now();
     this.lastTime = eventTimeStamp;
     if (!this.query) {
       // this.reset();
@@ -267,42 +266,50 @@ export default class TypeAhead extends Vue {
       this.showResult = false;
       // this.showResult = false;
       //TODO: refactor... code smell...
-      return;
+      // return;
     }
 
-    if (this.minChars && this.query.length < this.minChars) {
-      return;
+    if (this.minChars && this.query.length >= this.minChars) {
+      // console.log("creating promise");
+      const promise = new Promise((resolve) => {
+        // console.log('running promise');
+        setTimeout(() => {
+          // console.log('running timeout');
+          if (this.lastTime - eventTimeStamp === 0) {
+            // console.log('running objectUpdate');
+
+            this.loading = true;
+            this.showResult = true;
+
+            //TODO: refactor to make this async
+            this.objectUpdate();
+
+            this.current = -1;
+            this.loading = false;
+
+          }
+          // console.log('resolving');
+
+          resolve(input);
+          // resolve(this.$emit("update", input);
+        }, this.delayTime);
+      });
+      promise.then((value) => {
+        // console.log("emitting update");
+        this.$emit("update", value);
+      });
     }
-
-    setTimeout(() => {
-      if (this.lastTime - eventTimeStamp === 0) {
-        this.loading = true;
-        this.showResult = true;
-
-        //TODO: refactor to make this async
-        this.objectUpdate();
-
-        this.current = -1;
-        this.loading = false;
-
-        if (this.selectFirst) {
-          this.down();
-        }
-      }
-    }, this.delayTime);
-
-    return input;
+    //  else {
+    //   console.log("no promise");
+    // }
   }
 
   setActive(index) {
     this.current = index;
   }
 
-  activeClass(index) {
-    return this.current === index;
-  }
-
   up() {
+    console.log('up');
     if (this.current > 0) {
       this.current--;
     } else if (this.current === -1) {
@@ -310,20 +317,18 @@ export default class TypeAhead extends Vue {
     } else {
       this.current = -1;
     }
-    if (!this.selectFirst && this.current !== -1) {
-      this.setActive(this.current);
-    }
+
   }
 
   down() {
+    console.log('down');
     if (this.current < this.items.length - 1) {
       this.current++;
     } else {
       this.current = -1;
     }
-    if (!this.selectFirst && this.current !== -1) {
-      this.setActive(this.current);
-    }
+    //console.log(this.current);
+
   }
 
   reset(emit: boolean = true) {
