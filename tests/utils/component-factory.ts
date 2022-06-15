@@ -3,13 +3,16 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import Vue from "vue";
 import Vuex, { Store } from "vuex";
-import { createLocalVue, mount, VueClass, RouterLinkStub } from "@vue/test-utils";
+import { createLocalVue, mount, VueClass, RouterLinkStub, Wrapper } from "@vue/test-utils";
+import { DefaultMethods } from "vue/types/options";
 
 export function create(
   Component: VueClass<Vue>,
-  configureStore?: (store: any) => void,
-  propsData?: any,
-  store?: Store<unknown>,
+  propsData?: any | undefined,
+  template?: string | undefined,
+  methods?: DefaultMethods<Vue> | undefined,
+  configureStore?: (store: any) => void | undefined,
+  store?: Store<unknown> | undefined,
 ) {
 
   const localVue = createLocalVue();
@@ -22,14 +25,30 @@ export function create(
 
   configureStore?.(store);
 
-  const comp = mount(Component, {
-    propsData,
-    store,
-    stubs: {
-      RouterLink: RouterLinkStub
-    },
-    localVue,
-  });
+  let comp!: Wrapper<Vue, Element>;
+
+  if (template !== undefined) {
+    comp = mount(Component, {
+      template,
+      propsData,
+      store,
+      stubs: {
+        RouterLink: RouterLinkStub
+      },
+      localVue,
+      methods
+    });
+  } else {
+    comp = mount(Component, {
+      propsData,
+      store,
+      stubs: {
+        RouterLink: RouterLinkStub
+      },
+      localVue,
+      methods
+    });
+  }
 
   return comp;
 }
@@ -41,7 +60,7 @@ export async function createWithData(
   store?: Store<unknown>,
 ) {
 
-  const comp = create(Component, propsData, store);
+  const comp = create(Component, propsData, undefined, undefined, undefined, store);
 
   await comp.setData(data);
   await comp.vm.$nextTick();

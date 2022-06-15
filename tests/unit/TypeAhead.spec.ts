@@ -9,7 +9,7 @@ describe("type-ahead.vue", () => {
 
   beforeEach(() => {
     // Arrange
-    component = Factory.create(Components.TypeAhead, undefined, {
+    component = Factory.create(Components.TypeAhead, {
       items: Object.values(states)
     });
 
@@ -84,4 +84,58 @@ describe("type-ahead.vue", () => {
       });
 
   });
-})
+
+  it("Should set the value to the selected item in the results list", () => {
+
+    // Arrange
+    let model: Record<string, any> = {
+      name: '',
+      email: '',
+      state: ''
+    };
+
+    component = Factory.create(Components.TypeAhead,
+      {
+        value: model,
+        // rules: 'required', //TODO: handle setting up rules in unit tests.
+        placeholder: 'Type a state...',
+        name: "state",
+        queryPropertyName: "state", //TODO: rename prop...
+        items: Object.values(states),
+        onSelect: (item: any, instance: any) => {
+          instance.query = item;
+          // console.log('select');
+          // console.log(item);
+          model.name = item;
+          // console.log(model.name);
+          jest.runAllTimers();
+
+        }
+      }
+    );
+
+    jest.useFakeTimers();
+
+    const input = component.find('input');
+    const setPromise = input.setValue('New') as Promise<void>;
+    const inputElement = input.element as HTMLInputElement;
+
+    setPromise
+      .then(() => jest.runAllTimers())
+      .then(() => {
+        const firstResult = component.find('div.typeahead-dropdown-container > ul > li');
+
+        // Act
+        const clickResultPromise = firstResult.trigger('click') as Promise<void>;
+
+        clickResultPromise
+          .then(() => jest.runAllTimers())
+          .then(() => {
+
+            // Assert
+            expect(component.find('div.typeahead-dropdown-container').element).toBeFalsy();
+            expect(inputElement.value).toBe('New Hampshire');
+          });
+      });
+  });
+});

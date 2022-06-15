@@ -9,7 +9,7 @@
       :name="name"
       :rules="rules"
       autocomplete="off"
-      focus="true"
+      :focus="focus"
       v-model="query"
       @down="down"
       @up="up"
@@ -31,7 +31,7 @@
           v-for="(item, index) in currentItems"
           :class="{ active: isActive(index) }"
           :key="'li' + index"
-          @click.prevent="select"
+          @click.prevent="select(index)"
           @mousemove="setActive(index)"
         >
           <a v-html="highlighting(item, vue)"></a>
@@ -79,6 +79,8 @@ function escapeRegExp(str) {
 })
 export default class TypeAhead extends Vue {
   query = "";
+  queries: Array<string> = [];
+
   current = -1;
   loading = false;
   lastTime = 0;
@@ -111,20 +113,20 @@ export default class TypeAhead extends Vue {
   @Prop()
   classes!: string;
 
-  //TODO: @VModel
+  //TODO: investigate. @VModel doesn't seem to work well here. Watch never fires
   @Prop({ default: "" })
-  value!: string;
+  value!: Record<string, any> | string;
 
   @Prop()
-  onSelect!: Function;
+  onSelect!: (item: string) => void;
 
   @Prop()
   render!: Function;
 
   @Prop()
-  items!: Array<object>;
+  items!: Array<string>;
 
-  currentItems!: Array<object>;
+  currentItems!: Array<string>;
 
   @Prop()
   rules!: string;
@@ -135,11 +137,19 @@ export default class TypeAhead extends Vue {
   @Prop()
   name: string;
 
+  //TODO: rename...
   @Prop({ default: "name" })
   queryPropertyName!: string;
 
+  @Prop({ default: true })
+  focus!: boolean;
+
   mounted() {
-    this.query = this.value;
+    if (typeof this.value === "object") {
+      this.query = this.value[this.queryPropertyName];
+    } else {
+      this.query = this.value;
+    }
 
     if (this.items) {
       this.currentItems = this.items.sort();
@@ -148,8 +158,20 @@ export default class TypeAhead extends Vue {
   }
 
   @Watch("value")
-  onValueChanged(value) {
-    this.query = this.query !== value ? value : this.query;
+  onValueChanged(n) {
+    console.log("value changed...");
+    // console.log(n);
+    // console.log(o);
+    //TODO: refactor... can be simplified
+    if (typeof this.value === "object") {
+      this.query =
+        this.query !== n[this.queryPropertyName]
+          ? n[this.queryPropertyName]
+          : this.query;
+    } else {
+      this.query = this.query !== n ? n : this.query;
+    }
+    console.log(this.query);
   }
 
   @Watch("query")
@@ -207,8 +229,8 @@ export default class TypeAhead extends Vue {
   }
 
   static onSelectFunc(item, instance) {
-    // console.log("onSelectFunc");
-    // console.log(item);
+    console.log("onSelectFunc");
+    console.log(item);
     if (typeof item === "object") {
       instance.query = item[instance.queryPropertyName];
     } else {
@@ -216,12 +238,16 @@ export default class TypeAhead extends Vue {
     }
   }
 
-  select() {
+  select(index) {
+    this.current = index;
     if (this.current !== -1) {
-      const item = this.currentItems[this.current];
+      const item = this.currentItems[this.current] ;
+
       const select = this.onSelect ? this.onSelect : TypeAhead.onSelectFunc;
       select(item, this);
-      this.$emit("select", item);
+      this.$emit("select", item, this);
+      this.queries.push(this.query);
+      // console.log(item);
     }
     this.reset(false);
   }
@@ -230,7 +256,7 @@ export default class TypeAhead extends Vue {
   objectUpdate() {
     var filtered = this.currentItems.filter((entity) => {
       if (typeof entity === "object") {
-        return entity[this.queryPropertyName]
+        return (entity as any)[this.queryPropertyName]
           .toLowerCase()
           .includes(this.query.toLowerCase());
       } else {
@@ -249,7 +275,6 @@ export default class TypeAhead extends Vue {
     );
 
     this.current = -1;
-
   }
 
   // TODO: Code comments left for now... cleanup soon
@@ -286,7 +311,6 @@ export default class TypeAhead extends Vue {
 
             this.current = -1;
             this.loading = false;
-
           }
           // console.log('resolving');
 
@@ -309,7 +333,7 @@ export default class TypeAhead extends Vue {
   }
 
   up() {
-    console.log('up');
+    console.log("up");
     if (this.current > 0) {
       this.current--;
     } else if (this.current === -1) {
@@ -317,25 +341,23 @@ export default class TypeAhead extends Vue {
     } else {
       this.current = -1;
     }
-
   }
 
   down() {
-    console.log('down');
+    console.log("down");
     if (this.current < this.items.length - 1) {
       this.current++;
     } else {
       this.current = -1;
     }
     //console.log(this.current);
-
   }
 
   reset(emit: boolean = true) {
-    // this.currentItems = [];
     this.currentItems = this.items.sort();
     this.loading = false;
     this.showResult = false;
+    //this.query = "";
     if (emit) {
       this.$emit("reset", this);
     }

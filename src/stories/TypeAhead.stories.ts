@@ -11,31 +11,36 @@ export default {
 };
 
 
-const Template: Story = (args, { argTypes }) => ({
+const Template: Story = (args, { argTypes, updateArgs }) => ({
   props: Object.keys(argTypes),
   components: { TypeAhead },
-  template: '<type-ahead v-bind="$props" @update="log" v-model="model.state"/>',
+  template: '<type-ahead v-bind="$props" @update="log" @select="select" />',
   methods: {
-    log: (text) => console.log(text)
+    log: (text) => console.log(text),
+    select: (item: string, instance) => {
+      console.log(item);
+      model.state = item;
+      const value = model;
+      updateArgs({ ...args, value});
+      console.log('done select');
+    }
   }
 });
 
-let model: Record<string, string> = {
+let model: Record<string, any> = {
   name: '',
   email: '',
   state: ''
 };
 
-function onSelect(item: string) {
-  model.state = item;
-}
 
 export const Default = Template.bind({});
 Default.args = {
-  model,
+  value: model,
   rules: 'required',
   placeholder: 'Type a state...',
   name: "state",
-  onSelect,
+  queryPropertyName: "state", //TODO: rename prop...
+  // onSelect,
   items: Object.values(states),
 };
