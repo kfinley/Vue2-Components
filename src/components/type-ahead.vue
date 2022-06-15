@@ -228,13 +228,12 @@ export default class TypeAhead extends Vue {
     return this.current === index;
   }
 
-  static onSelectFunc(item, instance) {
-    console.log("onSelectFunc");
-    console.log(item);
+  updateQuery(item) {
+    // console.log(item);
     if (typeof item === "object") {
-      instance.query = item[instance.queryPropertyName];
+      this.query = item[this.queryPropertyName];
     } else {
-      instance.query = item;
+      this.query = item;
     }
   }
 
@@ -243,9 +242,9 @@ export default class TypeAhead extends Vue {
     if (this.current !== -1) {
       const item = this.currentItems[this.current] ;
 
-      const select = this.onSelect ? this.onSelect : TypeAhead.onSelectFunc;
-      select(item, this);
-      this.$emit("select", item, this);
+      this.onSelect && this.onSelect(item);
+      this.updateQuery(item);
+      this.$emit("select", item);
       this.queries.push(this.query);
       // console.log(item);
     }

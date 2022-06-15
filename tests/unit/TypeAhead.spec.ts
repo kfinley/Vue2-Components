@@ -28,8 +28,8 @@ describe("type-ahead.vue", () => {
         name: "state",
         queryPropertyName: "state", //TODO: rename prop...
         items: Object.values(states),
-        onSelect: (item: any, instance: any) => {
-          instance.query = item;
+        onSelect: (item: any) => {
+          // console.log(item);
           model.name = item;
         }
       }

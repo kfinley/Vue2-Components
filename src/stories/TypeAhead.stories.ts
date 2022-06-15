@@ -15,10 +15,10 @@ export default {
 const Template: Story = (args, { argTypes, updateArgs }) => ({
   props: Object.keys(argTypes),
   components: { TypeAhead },
-  template: '<type-ahead v-bind="$props" @update="log" @select="select" />',
+  template: '<type-ahead v-bind="$props" @update="log" @select="handleSelect" />',
   methods: {
     log: (text) => console.log(text),
-    select: (item: string, instance) => {
+    handleSelect: (item: any) => {
       console.log(item);
       model.state = item;
       const value = model;
@@ -42,6 +42,9 @@ Default.args = {
   placeholder: 'Type a state...',
   name: "state",
   queryPropertyName: "state", //TODO: rename prop...
-  // onSelect,
+  // onSelect: (item: any) => {
+  //   console.log(item);
+  //   model.name = item;
+  // },
   items: Object.values(states),
 };
