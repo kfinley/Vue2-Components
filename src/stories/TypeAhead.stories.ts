@@ -1,6 +1,7 @@
 import { Story } from '@storybook/vue/types-6-0';
 import TypeAhead from '../components/type-ahead.vue';
 import { states } from '@/data';
+import { numeric } from 'vee-validate/dist/rules';
 
 export default {
   title: 'Components/Inputs/Type Ahead',

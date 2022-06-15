@@ -31,9 +31,10 @@ export const setupValidation = (extend: (name: string, schema: ValidationRule) =
     validate: value => value >= 0
   });
 
+  // (value: any, params: any[] | Record<string, any>)
   extend('gt', {
     message: (field, params) => `${fieldToSentenceCase(field)} should be greater than ${params[0]}`,
-    validate: (value, [other]) => {
+    validate: (value, other: any[] | Record<string, any>) => {
       return value > other;
     }
   });

@@ -3,15 +3,37 @@ import { Wrapper } from "@vue/test-utils";
 import { Factory } from "../utils";
 import { states } from '@/data';
 
+//TODO: move to helper..
+//Setup validation
+import { setupValidation } from '@/components/validation';
+import { extend } from 'vee-validate';
+setupValidation(extend);
+
 describe("type-ahead.vue", () => {
 
   let component: Wrapper<Vue, Element>;
+  let model: Record<string, any> = {
+    name: '',
+    email: '',
+    state: ''
+  };
 
   beforeEach(() => {
     // Arrange
-    component = Factory.create(Components.TypeAhead, {
-      items: Object.values(states)
-    });
+    component = Factory.create(Components.TypeAhead,
+      {
+        value: model,
+        rules: 'required',
+        placeholder: 'Type a state...',
+        name: "state",
+        queryPropertyName: "state", //TODO: rename prop...
+        items: Object.values(states),
+        onSelect: (item: any, instance: any) => {
+          instance.query = item;
+          model.name = item;
+        }
+      }
+    );
 
     jest.useFakeTimers();
   });
@@ -88,33 +110,6 @@ describe("type-ahead.vue", () => {
   it("Should set the value to the selected item in the results list", () => {
 
     // Arrange
-    let model: Record<string, any> = {
-      name: '',
-      email: '',
-      state: ''
-    };
-
-    component = Factory.create(Components.TypeAhead,
-      {
-        value: model,
-        // rules: 'required', //TODO: handle setting up rules in unit tests.
-        placeholder: 'Type a state...',
-        name: "state",
-        queryPropertyName: "state", //TODO: rename prop...
-        items: Object.values(states),
-        onSelect: (item: any, instance: any) => {
-          instance.query = item;
-          // console.log('select');
-          // console.log(item);
-          model.name = item;
-          // console.log(model.name);
-          jest.runAllTimers();
-
-        }
-      }
-    );
-
-    jest.useFakeTimers();
 
     const input = component.find('input');
     const setPromise = input.setValue('New') as Promise<void>;
