@@ -118,15 +118,15 @@ export default class TypeAhead extends Vue {
   value!: Record<string, any> | string;
 
   @Prop()
-  onSelect!: (item: string) => void;
+  onSelect!: (item: Record<string, any> | string) => void;
 
   @Prop()
   render!: Function;
 
   @Prop()
-  items!: Array<string>;
+  items!: Array<Record<string, any> | string>;
 
-  currentItems!: Array<string>;
+  currentItems!: Array<Record<string, any> | string>;
 
   @Prop()
   rules!: string;
@@ -151,10 +151,19 @@ export default class TypeAhead extends Vue {
       this.query = this.value;
     }
 
-    if (this.items) {
-      this.currentItems = this.items.sort();
-    }
+    this.setCurrentItems();
+
     //console.log(this.currentItems);
+  }
+
+  setCurrentItems() {
+    this.currentItems = this.items;
+  }
+
+  @Watch("items")
+  onItemsChanged() {
+    // console.log("items changed");
+    this.setCurrentItems();
   }
 
   @Watch("value")
@@ -239,8 +248,8 @@ export default class TypeAhead extends Vue {
 
   select(index) {
     this.current = index;
-    if (this.current !== -1) {
-      const item = this.currentItems[this.current] ;
+    if (this.currentItems && this.current !== -1) {
+      const item = this.currentItems[this.current];
 
       this.onSelect && this.onSelect(item);
       this.updateQuery(item);
@@ -253,9 +262,10 @@ export default class TypeAhead extends Vue {
 
   //TODO: rename to filterItemsUsingQuery
   objectUpdate() {
-    var filtered = this.currentItems.filter((entity) => {
+    // console.log(this.currentItems);
+    var filtered = this.currentItems?.filter((entity) => {
       if (typeof entity === "object") {
-        return (entity as any)[this.queryPropertyName]
+        return entity[this.queryPropertyName]
           .toLowerCase()
           .includes(this.query.toLowerCase());
       } else {
@@ -263,17 +273,19 @@ export default class TypeAhead extends Vue {
       }
     });
 
-    //TODO: refactor.... should be able to remove this.data
-    this.data = this.limit ? filtered.slice(0, this.limit) : filtered;
+    if (filtered) {
+      //TODO: refactor.... should be able to remove this.data
+      this.data = this.limit ? filtered.slice(0, this.limit) : filtered;
 
-    const render = this.render ? this.render : this.renderFunc;
+      const render = this.render ? this.render : this.renderFunc;
 
-    this.currentItems = render(
-      this.limit ? this.data.slice(0, this.limit) : this.data,
-      this
-    );
+      this.currentItems = render(
+        this.limit ? this.data.slice(0, this.limit) : this.data,
+        this
+      );
 
-    this.current = -1;
+      this.current = -1;
+    }
   }
 
   // TODO: Code comments left for now... cleanup soon

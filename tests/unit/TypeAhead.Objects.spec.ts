@@ -9,18 +9,7 @@ import { setupValidation } from '@/components/validation';
 import { extend } from 'vee-validate';
 setupValidation(extend);
 
-let objects = [
-  {
-    id: '09f8905a-1de9-4bc3-9326-f419c4d3f2d3',
-    state: 'New Hampshire'
-  },
-  {
-    id: '48487227-5105-4a8e-a36e-a4223266bd58',
-    state: 'New York'
-  }
-];
-
-describe("type-ahead.vue using strings as items", () => {
+describe("type-ahead.vue using objects as items", () => {
 
   let component: Wrapper<Vue, Element>;
   let model: Record<string, any> = {
@@ -28,10 +17,6 @@ describe("type-ahead.vue using strings as items", () => {
     email: '',
     state: ''
   };
-
-  let items: Array<Record<string, any> | string>;
-
-  items = Object.values(states);
 
   beforeEach(() => {
     // Arrange
@@ -42,7 +27,7 @@ describe("type-ahead.vue using strings as items", () => {
         placeholder: 'Type a state...',
         name: "state",
         queryPropertyName: "state", //TODO: rename prop...
-        items,
+        items: Object.values(states),
         onSelect: (item: any) => {
           // console.log(item);
           model.name = item;
@@ -122,53 +107,31 @@ describe("type-ahead.vue using strings as items", () => {
 
   });
 
-  it.each([
-    { type: 'strings', values: Object.values(states) },
-    { type: 'objects', values: objects }
-  ])
-    ('Should set the value to the selected item in the results list using string | objects',
-      ({ type, values }) => {
-        // console.log(type);
-        // console.log(values);
-        // console.log(items);
+  it("Should set the value to the selected item in the results list", () => {
 
-        // Arrange
-        component = Factory.create(Components.TypeAhead,
-          {
-            value: model,
-            rules: 'required',
-            placeholder: 'Type a state...',
-            name: "state",
-            queryPropertyName: "state", //TODO: rename prop...
-            items: values,
-            onSelect: (item: any) => {
-              // console.log(item);
-              model.name = item;
-            }
-          }
-        );
+    // Arrange
 
-        const input = component.find('input');
-        const setPromise = input.setValue('New') as Promise<void>;
-        const inputElement = input.element as HTMLInputElement;
+    const input = component.find('input');
+    const setPromise = input.setValue('New') as Promise<void>;
+    const inputElement = input.element as HTMLInputElement;
 
-        setPromise
+    setPromise
+      .then(() => jest.runAllTimers())
+      .then(() => {
+        const firstResult = component.find('div.typeahead-dropdown-container > ul > li');
+
+        // Act
+        const clickResultPromise = firstResult.trigger('click') as Promise<void>;
+
+        clickResultPromise
           .then(() => jest.runAllTimers())
           .then(() => {
-            const firstResult = component.find('div.typeahead-dropdown-container > ul > li');
 
-            // Act
-            const clickResultPromise = firstResult.trigger('click') as Promise<void>;
-
-            clickResultPromise
-              .then(() => jest.runAllTimers())
-              .then(() => {
-
-                // Assert
-                expect(component.find('div.typeahead-dropdown-container').element).toBeFalsy();
-                expect(inputElement.value).toBe('New Hampshire');
-              });
+            // Assert
+            expect(component.find('div.typeahead-dropdown-container').element).toBeFalsy();
+            expect(inputElement.value).toBe('New Hampshire');
           });
       });
+  });
 
 });
