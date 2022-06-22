@@ -126,7 +126,7 @@ describe("type-ahead.vue using strings as items", () => {
     { type: 'strings', values: Object.values(states) },
     { type: 'objects', values: objects }
   ])
-    ('Should set the value to the selected item in the results list using string | objects',
+    ('Should set the value to the selected item in the results list using string | objects', //TODO: figure out how to get string formatting to work for $type var
       ({ type, values }) => {
         // console.log(type);
         // console.log(values);
