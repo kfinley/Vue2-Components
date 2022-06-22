@@ -1,9 +1,9 @@
 import { Story } from '@storybook/vue/types-6-0';
-import AnimatedNumber from '../components/animated-number.vue';
+import CountingNumber from '../components/counting-number.vue';
 
 export default {
-  title: 'Components/Animated/Number',
-  component: AnimatedNumber,
+  title: 'Components/Controls/Counting Number',
+  component: CountingNumber,
   parameters: {
     layout: 'centered'
   },
@@ -17,8 +17,8 @@ export default {
 
 const DefaultTemplate: Story = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { AnimatedNumber },
-  template: '<animated-number v-bind="$props" style="font-family: \'Nunito Sans\'; font-size: 100px;"></animated-number>'
+  components: { CountingNumber },
+  template: '<counting-number v-bind="$props" style="font-family: \'Nunito Sans\'; font-size: 100px;"/>'
 });
 
 export const Default = DefaultTemplate.bind({});

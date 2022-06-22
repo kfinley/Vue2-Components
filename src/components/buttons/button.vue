@@ -89,15 +89,15 @@ export default class Button extends Vue {
     color: #000;
   }
 
-  // White Hover Display
-  &--white-hover-display,
-  &--white-hover-display:link,
-  &--white-hover-display:visited {
+  // Hover Display
+  &--hover-display,
+  &--hover-display:link,
+  &--hover-display:visited {
     background-color: transparent;
     border-color: $color--white;
     color: $color--white;
   }
-  &--white-hover-display:hover {
+  &--hover-display:hover {
     background-color: rgba(255, 255, 255, 0.4);
     border-color: rgba(255, 255, 255, 0.4);
     color: $color--black;

@@ -15,7 +15,7 @@ export default {
         "btn--wide",
         "btn--hover-fill",
         "btn--white",
-        "btn--white-hover-display",
+        "btn--hover-display",
         "btn--grey-hover-fill",
         "btn--text",
         "btn--cancel",
@@ -73,7 +73,7 @@ HoverFill.args = {
 
 export const HoverDisplay = Template.bind({});
 HoverDisplay.args = {
-  label: "White Hover Display",
-  classes: ['btn--white-hover-display']
+  label: "Hover Display",
+  classes: ['btn--hover-display']
 }
 
