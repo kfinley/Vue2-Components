@@ -20,7 +20,7 @@ let objects = [
   }
 ];
 
-describe("type-ahead.vue using strings as items", () => {
+describe("type-ahead.vue", () => {
 
   let component: Wrapper<Vue, Element>;
   let model: Record<string, any> = {
