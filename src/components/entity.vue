@@ -15,15 +15,20 @@ import { Component, Prop, Watch } from "vue-property-decorator";
 
 @Component({})
 export default class Entity extends Vue {
+  //TODO: refactor...
   @Prop() entity!: { id: string };
-  @Prop() type!: string; //TODO: move this to type
+  @Prop() type!: string;
+
+  //?
   element!: Element;
 
   setProperties() {
     const element = this.$el;
     element.classList.add("entity-wrapper");
-    element.id = this.entity.id;
-    element.setAttribute("data-type", this.type);
+   if (this.entity !== undefined) {
+      element.id = this.entity.id;
+      element.setAttribute("data-type", this.type);
+    }
   }
 
   mounted() {
