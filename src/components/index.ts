@@ -14,6 +14,7 @@ import Notification from './notification.vue';
 import NotificationList from './notification-list.vue';
 import Spinner from './spinner.vue';
 import Swipeable from './swipeable.vue';
+import SwipeableList from './swipeable-list.vue';
 import Toggle from './toggles/toggle.vue';
 import TypeAhead from './type-ahead.vue';
 import ValidInput from './validation/valid-input.vue';
@@ -35,6 +36,7 @@ export default {
   NotificationList,
   Spinner,
   Swipeable,
+  SwipeableList,
   Toggle,
   TypeAhead,
   ValidInput
