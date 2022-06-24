@@ -64,6 +64,7 @@
 import { Component, Vue, Ref, Prop, Emit, Watch } from "vue-property-decorator";
 import vClickOutside from "v-click-outside";
 import ValidInput from "./validation/valid-input.vue";
+import { search } from "../search";
 
 function escapeRegExp(str) {
   // eslint-disable-next-line no-useless-escape
@@ -137,7 +138,7 @@ export default class TypeAhead extends Vue {
   @Prop()
   name: string;
 
-  //TODO: rename...
+  //TODO: refactor / rename...
   @Prop({ default: "name" })
   queryPropertyName!: string;
 
@@ -169,6 +170,7 @@ export default class TypeAhead extends Vue {
   @Watch("value")
   onValueChanged(n) {
     console.log("value changed...");
+
     // console.log(n);
     // console.log(o);
     //TODO: refactor... can be simplified
@@ -203,31 +205,74 @@ export default class TypeAhead extends Vue {
     return items;
   }
 
+  //TODO: rename. This method handles what is displayed in the result list. It's evolved to more than just highlighting at this point..
   highlighting(item, instance) {
     // console.log(item);
     // console.log(instance);
+
     if (item !== undefined && instance !== undefined) {
-      var re = new RegExp(escapeRegExp(instance.query), "ig");
+      // console.log(search(item, instance.query));
+
+      var regEx = new RegExp(escapeRegExp(instance.query), "gi");
 
       let matches: any;
 
+      const searchResult = search(item, instance.query);
+
       if (typeof item === "object") {
-        matches = item[this.queryPropertyName].match(re);
+        matches = searchResult.match(regEx);
+        // matches = item[this.queryPropertyName].match(regEx);
       } else {
-        matches = item.match(re);
+        matches = item.match(regEx);
       }
 
       matches &&
         matches.forEach((match) => {
           if (typeof item === "object") {
-            item = item[this.queryPropertyName].replace(
-              match,
-              `<b>${match}</b>`
-            );
+//            console.log("object");
+            if (search(item[this.queryPropertyName], instance.query) == false) {
+              item = `${
+                item[this.queryPropertyName]
+              }<br/>${searchResult.replace(match, `<i><b>${match}</b></i>`)}`; //?
+            } else {
+              item = item[this.queryPropertyName].replace(match, `<b>${match}</b>`);
+            }
           } else {
+          //  console.log("not object");
             item = item.replace(match, `<b>${match}</b>`);
           }
         });
+      // matches &&
+
+      //const foo = search(item, instance.query);
+      //console.log(foo);
+
+      // if (typeof foo === "object") {
+      //   if (search(item[this.queryPropertyName], instance.query) == false) {
+      //     console.log("term found in property");
+
+      //   } else {
+      //     var regEx = new RegExp(escapeRegExp(instance.query), "gi");
+      //     const matches = item[this.queryPropertyName].match(regEx);
+      //     matches.forEach((match) => {
+      //       item = foo[this.queryPropertyName].replace(
+      //         match,
+      //         `<b>${match}</b>`
+      //       );
+      //     });
+      //   }
+
+      //   //console.log(search(item[this.queryPropertyName], instance.query));
+
+      //   // item = foo[this.queryPropertyName].replace(match, `<b>${match}</b>`);
+      // } else {
+      //   console.log("not object");
+      //   const match = item.match(
+      //     new RegExp(escapeRegExp(instance.query), "gi")
+      //   );
+      //   item = item.replace(match, `<b>${match}</b>`);
+      // }
+      // });
     }
 
     return item;
@@ -263,14 +308,12 @@ export default class TypeAhead extends Vue {
   //TODO: rename to filterItemsUsingQuery
   objectUpdate() {
     // console.log(this.currentItems);
-    var filtered = this.currentItems?.filter((entity) => {
-      if (typeof entity === "object") {
-        return entity[this.queryPropertyName]
-          .toLowerCase()
-          .includes(this.query.toLowerCase());
-      } else {
-        return (entity as any).toLowerCase().includes(this.query.toLowerCase());
+
+    var filtered = search(this.currentItems, this.query).filter((e) => {
+      if (typeof e === "object") {
+        return e[this.queryPropertyName];
       }
+      return e;
     });
 
     if (filtered) {
@@ -278,12 +321,14 @@ export default class TypeAhead extends Vue {
       this.data = this.limit ? filtered.slice(0, this.limit) : filtered;
 
       const render = this.render ? this.render : this.renderFunc;
+      // console.log(this.data);
 
       this.currentItems = render(
         this.limit ? this.data.slice(0, this.limit) : this.data,
         this
       );
 
+      // console.log(this.currentItems);
       this.current = -1;
     }
   }
