@@ -3,11 +3,11 @@ name: Publish main branch Storybook
 on:
   push:
     branches: [main]
-    paths:
-      - src/.storybook/**
-      - src/stories/**
-      - src/components/**
-      - src/styles/**
+    # paths:
+    #   - src/.storybook/**
+    #   - src/stories/**
+    #   - src/components/**
+    #   - src/styles/**
 
 jobs:
   storybook:
