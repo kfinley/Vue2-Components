@@ -3,7 +3,7 @@ import Card from '@/components/card.vue';
 import Entity from '@/components/entity.vue';
 import { action } from '@storybook/addon-actions';
 
-// const dragged = (direction: string) => action(`dragged ${direction}`);
+const dragged = (direction: string) => action(`dragged ${direction}`);
 
 export default {
   title: 'Components/Controls/Entity',
