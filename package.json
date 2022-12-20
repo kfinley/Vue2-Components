@@ -12,7 +12,8 @@
   "dependencies": {
     "interactjs": "^1.10.11",
     "v-click-outside": "^3.2.0",
-    "vee-validate": "^3.4.14"
+    "vee-validate": "^3.4.14",
+    "vue-router":  "^3.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
