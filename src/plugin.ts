@@ -1,34 +1,34 @@
-import Vue, { PluginFunction, PluginObject } from "vue";
-import * as components from './components';
+import Vue from "vue";
+// import * as components from './components';
 import NotificationModule from "./store/notification-module";
 import { Store } from "vuex";
-import router from "vue-router";
 import { getModule } from "vuex-module-decorators";
-
-export interface ComponentsPlugin extends PluginObject<ComponentLibraryPluginOptions> {
-  install: PluginFunction<ComponentLibraryPluginOptions>;
-}
-
-export interface ComponentLibraryPluginOptions {
-  router: router;
-  store: Store<any>;
-}
-
+import { ClientPlugin, ClientPluginOptions } from './types';
+import { Container } from "inversify-props";
+import { initializeModules, notificationModule } from "./store";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const setupModules = (store: Store<any>): void => {
+export const setupModules = (store: Store<any>, container: Container): void => {
   console.log('registering vue2-components modules')
-  store.registerModule("NotificationModule", NotificationModule);
+  store.registerModule("Notification", NotificationModule);
+
+  initializeModules(store);
+  
+  container.bind<NotificationModule>("NotificationModule").toDynamicValue(() => notificationModule);
+
 };
 
+const ComponentLibraryPlugin: ClientPlugin = {
+  install(vue: typeof Vue, options?: ClientPluginOptions) {
 
-const ComponentLibraryPlugin = {
-  install(vue: typeof Vue, options?: ComponentLibraryPluginOptions) {
-    Object.keys(components).forEach(name => {
-      vue.component(name, (<any>components)[name]);
-    });
+    // This blows up with mixins not being loaded yet.
+
+    // Object.keys(components).forEach(name => {
+    //   vue.component(name, (<any>components)[name]);
+    // });
+
     if (options !== undefined && options.store) {
-      setupModules(options.store);
+      setupModules(options.store, options.container);
 
       options.router.beforeEach((to, from, next) => {
         getModule(NotificationModule, options.store).dismissAll();

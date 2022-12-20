@@ -1,4 +1,4 @@
-import { AlertType, Notification, HandleErrorParams } from "@/types";
+import { AlertType, Notification, HandleErrorParams } from "./../types";
 import { Module, Mutation, Action } from "vuex-module-decorators";
 import BaseModule from "./base-module";
 import { NotificationState } from "./state";

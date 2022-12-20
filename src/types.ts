@@ -1,3 +1,8 @@
+import { PluginFunction, PluginObject } from "vue";
+import { Store } from "vuex";
+import router from "vue-router";
+import { Container } from "inversify-props";
+
 export enum AlertType {
   danger = "danger",
   dark = "dark",
@@ -18,4 +23,16 @@ export interface Notification {
 export interface HandleErrorParams {
   error: any;
   rethrow: boolean;
+}
+
+export interface ClientPluginOptions {
+  appName: string;
+  router: router;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  store: Store<any>;
+  container: Container;
+}
+
+export interface ClientPlugin extends PluginObject<ClientPluginOptions> {
+  install: PluginFunction<ClientPluginOptions>;
 }
