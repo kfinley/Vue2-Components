@@ -13,7 +13,7 @@ export const setupModules = (store: Store<any>, container: Container): void => {
   store.registerModule("Notification", NotificationModule);
 
   initializeModules(store);
-  
+
   container.bind<NotificationModule>("NotificationModule").toDynamicValue(() => notificationModule);
 
 };
