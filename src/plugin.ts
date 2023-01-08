@@ -7,6 +7,8 @@ import { ClientPlugin, ClientPluginOptions } from './types';
 import { Container } from "inversify-props";
 import { initializeModules, notificationModule } from "./store";
 
+import './styles/styles.scss';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setupModules = (store: Store<any>, container: Container): void => {
   console.log('registering vue2-components modules')
