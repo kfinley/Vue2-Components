@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-      // "composite": true,
+      "target": "es2018",
       "module": "esnext",
       "strict": true,
       "jsx": "preserve",
@@ -32,7 +32,11 @@
       ]
     },
     "include": [
-      "src/**/*"
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.vue",
+      "tests/**/*.ts",
+      "tests/**/*.tsx"
     ],
     "exclude": [
       "node_modules"

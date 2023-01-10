@@ -19,7 +19,7 @@ import Toggle from './toggles/toggle.vue';
 import TypeAhead from './type-ahead.vue';
 import ValidInput from './validation/valid-input.vue';
 
-export default {
+const Components = {
   CountingNumber,
   BubbleButton,
   BubbleButtonBanner,
@@ -41,3 +41,5 @@ export default {
   TypeAhead,
   ValidInput
 };
+
+export default Components;

@@ -5,11 +5,6 @@ import { createVuePlugin } from 'vite-plugin-vue2';
 export default defineConfig(
   {
     build: {
-      lib: {
-        entry: path.resolve(__dirname, 'src/plugin.ts'),
-        name: '@finley/vue2-components',
-        fileName: 'vue2-components',
-      },
       // target: 'es2020',
       chunkSizeWarningLimit: 600,
       cssCodeSplit: false
@@ -21,7 +16,6 @@ export default defineConfig(
     // },
     plugins: [
       createVuePlugin(),
-      // sitemapPlugin(),
     ],
     server: {
       port: 8080
@@ -29,7 +23,7 @@ export default defineConfig(
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "src/styles/_variables.scss";`
+          additionalData: `@import "src/styles/_variables.scss"; @import "src/styles/_breakpoint.scss";`
         }
       }
     },

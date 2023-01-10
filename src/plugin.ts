@@ -3,11 +3,20 @@ import Vue from "vue";
 import NotificationModule from "./store/notification-module";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import { ClientPlugin, ClientPluginOptions } from './types';
+import { ClientPlugin } from './types';
 import { Container } from "inversify-props";
 import { initializeModules, notificationModule } from "./store";
+import router from "vue-router";
 
 import './styles/styles.scss';
+
+export interface ClientPluginOptions {
+  appName: string;
+  router: router;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  store: Store<any>;
+  container: Container;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setupModules = (store: Store<any>, container: Container): void => {
@@ -16,7 +25,7 @@ export const setupModules = (store: Store<any>, container: Container): void => {
 
   initializeModules(store);
 
-  container.bind<NotificationModule>("NotificationModule").toDynamicValue(() => notificationModule);
+  container.addTransient<NotificationModule>("NotificationModule").toDynamicValue(() => notificationModule);
 
 };
 

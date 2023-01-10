@@ -1,5 +1,5 @@
-export * from './plugin';
-export * from './components';
-export * from './types';
-export * from './utils';
-export * from './data';
+import ComponentLibraryPlugin from "./plugin";
+
+export {
+  ComponentLibraryPlugin
+};
