@@ -25,8 +25,9 @@ export const setupModules = (store: Store<any>, container: Container): void => {
 
   initializeModules(store);
 
-  container.addTransient<NotificationModule>("NotificationModule").toDynamicValue(() => notificationModule);
-
+  container
+    .bind<NotificationModule>("NotificationModule")
+    .toDynamicValue(() => notificationModule);
 };
 
 const ComponentLibraryPlugin: ClientPlugin = {
