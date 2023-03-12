@@ -16,11 +16,11 @@
           @doubleClick="doubleClicked(item)"
         >
           <div v-if="hasSlot('card')" class="card-slot">
-            <card showClose="false">
-              <entity :entity="item">
-                <slot name="card" :entity="item"></slot>
-              </entity>
-            </card>
+            <!-- <card showClose="false"> --> 
+            <entity :entity="item">
+              <slot name="card" :entity="item"></slot>
+            </entity>
+            <!-- </card> -->
           </div>
           <div v-else>
             <slot>
@@ -74,7 +74,6 @@ export default class SwipeableList extends Vue {
   }
 
   mounted() {
-
     //TODO: refactor...
     setAppHeight();
     setAppWidth();
