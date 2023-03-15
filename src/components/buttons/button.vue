@@ -3,7 +3,7 @@
     class="btn clickable"
     :class="joinClasses"
     :href="link"
-    @click="$emit('click')"
+    @click.prevent="click"
   >
     <slot></slot>
   </a>
@@ -23,6 +23,12 @@ export default class Button extends Vue {
   get joinClasses() {
     return this.classes?.join(" ");
   }
+  click() {
+    this.$emit("clicked");
+    if (this.link !== undefined) {
+      window.location.href = this.link;
+    }
+  }
 }
 </script>
 
@@ -40,7 +46,7 @@ export default class Button extends Vue {
   font-weight: 700;
   overflow: hidden;
   outline: none;
-  padding: 16px 22px;
+  // padding: 16px 22px; //TODO: prop this....
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -121,7 +127,7 @@ export default class Button extends Vue {
   &--text:visited {
     border: none;
     background-color: transparent;
-    color: $color__primary;
+    color: $color--primary;
   }
 
   &--cancel,

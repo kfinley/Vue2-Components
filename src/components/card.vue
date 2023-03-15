@@ -11,7 +11,7 @@
                 style="position: absolute; top: 0; right: 0"
                 data-bs-dismiss="alert"
                 aria-label="Close"
-                v-if="showClose"
+                v-if="showClose == true || showClose == 'true'"
                 @click.prevent="cancel"
               ></button>
               <p class="text-xl m-0">
@@ -32,30 +32,30 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component({})
 export default class Card extends Vue {
   @Prop()
   cancel!: () => void;
 
-  @Prop( { default: null })
+  @Prop({ default: null })
   headerText!: string;
 
   @Prop({ default: true })
-  showClose!: boolean;
+  showClose!: boolean | string;
 
-  @Prop({ default: '' })
+  @Prop({ default: "" })
   cardBodyClasses!: string;
 
   @Prop()
   maxWidth!: string;
 
-  @Prop({ default: '1' })
+  @Prop({ default: "1" })
   padding!: string;
 
   get style() {
-    return this.maxWidth ? `max-width: ${this.maxWidth};` : '';
+    return this.maxWidth ? `max-width: ${this.maxWidth};` : "";
   }
 }
 </script>

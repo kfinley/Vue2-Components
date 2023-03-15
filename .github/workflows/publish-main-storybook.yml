@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 14
 
-      - name: npm install and lerna bootstrap
+      - name: npm install
         run: |
           cd $GITHUB_WORKSPACE/main
           npm install -g npm@latest
