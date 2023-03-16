@@ -1,14 +1,20 @@
 <template>
   <div class="notification-list">
-    <div v-for="(note, index) in notifications" :key="index">
-      <notification :type="note.type" :timed="note.timed" :message="note.message" />
+    <div v-for="(note, index) in state.notifications" :key="index">
+      <notification
+        :type="note.type"
+        :timed="note.timed"
+        :message="note.message"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { NotificationState } from '../store';
 import Notification from './notification.vue';
+import { State } from "vuex-class";
 
 @Component({
   components: {
@@ -16,10 +22,7 @@ import Notification from './notification.vue';
   }
 })
 export default class NotificationList extends Vue {
-
-    @Prop({ required: true})
-        notifications!: Array<string>;
-
+  @State("Notification") state!: NotificationState;
 }
 </script>
 

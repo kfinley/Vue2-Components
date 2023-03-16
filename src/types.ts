@@ -1,5 +1,5 @@
 import { PluginFunction, PluginObject } from "vue";
-import { ClientPluginOptions } from './plugin';
+import { ClientPluginOptions } from "./plugin";
 
 export enum AlertType {
   danger = "danger",
@@ -12,10 +12,14 @@ export enum AlertType {
   warning = "warning",
 }
 
+export type NotificationType = "alert" | "error" | "success";
+
 export interface Notification {
   header?: string;
   message: string;
-  type: AlertType;
+  type: NotificationType;
+  timed?: boolean;
+  delay?: number;
 }
 
 export interface HandleErrorParams {

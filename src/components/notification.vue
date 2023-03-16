@@ -27,7 +27,7 @@ export default class Notification extends Vue {
   @Prop()
   message!: string;
 
-  @Prop({default: 5})
+  @Prop({ default: 5 })
   delay!: number;
 
   loading = true;

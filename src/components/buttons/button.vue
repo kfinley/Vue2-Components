@@ -2,7 +2,7 @@
   <a
     class="btn clickable"
     :class="joinClasses"
-    :href="link"
+    href="javascript:void(0);"
     @click.prevent="click"
   >
     <slot></slot>
@@ -20,19 +20,44 @@ export default class Button extends Vue {
   @Prop({ required: false })
   link!: string;
 
+  @Prop({ required: false, default: false })
+  disabled: boolean;
+
   get joinClasses() {
-    return this.classes?.join(" ");
+    if (this.disabled) {
+      this.classes?.push("btn--disabled");
+      return this.classes?.join(" ");
+    } else {
+      return this.classes?.filter((c) => c !== "btn--disabled").join(" ");
+    }
   }
   click() {
-    this.$emit("clicked");
-    if (this.link !== undefined) {
-      window.location.href = this.link;
+    if (!this.disabled) {
+      this.$emit("clicked");
+      if (this.link) {
+        window.location.href = this.link;
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.btn--disabled {
+  pointer-events: none;
+  color: $color--disabled !important;
+
+  &:hover {
+    background-color: $color--primary;
+    border-color: $color--primary;
+    color: $color--disabled;
+    text-shadow: none;
+    &:after {
+      background: $color--active;
+      height: 450%;
+    }
+  }
+}
 .btn {
   transition: all 400ms ease;
   background-color: $color--primary;

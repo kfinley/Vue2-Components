@@ -1,4 +1,4 @@
-import { AlertType, Notification, HandleErrorParams } from "./../types";
+import { AlertType, Notification, HandleErrorParams, NotificationType } from "./../types";
 import { Module, Mutation, Action } from "vuex-module-decorators";
 import BaseModule from "./base-module";
 import { NotificationState } from "./state";
@@ -14,7 +14,7 @@ export default class NotificationModule
   setSuccess(params: { header?: string; message: string }) {
     this.context.commit("add", {
       ...params,
-      type: AlertType.success,
+      type: "success",
     });
   }
 
@@ -22,18 +22,18 @@ export default class NotificationModule
   setError(params: { header?: string; message: string }) {
     this.context.commit("add", {
       ...params,
-      type: AlertType.danger,
+      type: "error",
     });
   }
 
   @Mutation
   handleError (params: HandleErrorParams) {
-    console.log(params.error);
+    //console.log(params.error);
 
     this.notifications.push({
       header: "Error",
       message: params.error.message !== undefined ? params.error.message : params.error,
-      type: AlertType.danger,
+      type: "error",
     });
 
     if (params.rethrow) {
@@ -42,7 +42,7 @@ export default class NotificationModule
   }
 
   @Mutation
-  add(params: { header?: string; message: string; type: AlertType }) {
+  add(params: { header?: string; message: string; type: NotificationType }) {
     this.notifications.push({
       header: params.header,
       message: params.message,
