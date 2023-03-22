@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" >
+  <transition name="modal">
     <div class="modal-mask" ref="modal">
       <div class="modal-wrapper">
         <div class="modal-container">
@@ -27,9 +27,9 @@
 
 <script lang="ts">
 //ht https://vuejs.org/v2/examples/modal.html
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop } from "vue-property-decorator";
 import Button from "./buttons/button.vue";
-import { setAppHeight, setStyleProperty } from '../utils';
+import { setAppHeight, setStyleProperty } from "../utils";
 
 @Component({
   components: {
@@ -37,15 +37,13 @@ import { setAppHeight, setStyleProperty } from '../utils';
   },
 })
 export default class Modal extends Vue {
-
-  @Prop({ default: '60%'})
+  @Prop({ default: "60%" })
   width!: string;
 
   mounted() {
-
     setAppHeight();
 
-    setStyleProperty('--modal-width', this.width);
+    setStyleProperty("--modal-width", this.width);
 
     const zIndex = Math.ceil(new Date().getTime() / 1000).toString();
     (this.$refs.modal as any).style.zIndex = zIndex;
@@ -53,7 +51,8 @@ export default class Modal extends Vue {
 }
 </script>
 
-
 <style lang="scss" scoped>
 @import "../styles/modal.scss";
+
+
 </style>

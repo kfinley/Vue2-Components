@@ -33,7 +33,7 @@ export default class Button extends Vue {
   }
   click() {
     if (!this.disabled) {
-      this.$emit("clicked");
+      this.$emit("click");
       if (this.link) {
         window.location.href = this.link;
       }

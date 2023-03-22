@@ -58,7 +58,7 @@ export default class Swipeable extends Vue {
     const element = this.$refs.interactElement as Interact.Target;
 
     interact(element).draggable({
-      onstart: this.onStart,
+      onstart: this.onStart,  
       onmove: this.onMove,
       onend: this.onEnd,
     });
