@@ -4,17 +4,17 @@
     <div v-if="!!this.$scopedSlots.expand">
       <slot name="expand"></slot>
       <div v-for="(prop, index) in Object.keys(entity)" :key="index">
-        <div>{{ prop }}: {{ entity[prop] }}</div>
+        <div>{{ toSentence(prop) }}: {{ entity[prop] }}</div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import Vue from "vue";
+import BaseControl from "./base-control";
 import { Component, Prop, Watch } from "vue-property-decorator";
 
 @Component({})
-export default class Entity extends Vue {
+export default class Entity extends BaseControl {
   //TODO: refactor...
   @Prop() entity!: { id: string };
   @Prop() type!: string;
