@@ -11,15 +11,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { NotificationState } from '../store';
-import Notification from './notification.vue';
+import { Component, Vue } from "vue-property-decorator";
+import { NotificationState } from "../store";
+import Notification from "./notification.vue";
 import { State } from "vuex-class";
 
 @Component({
   components: {
-    Notification
-  }
+    Notification,
+  },
 })
 export default class NotificationList extends Vue {
   @State("Notification") state!: NotificationState;
@@ -32,7 +32,8 @@ export default class NotificationList extends Vue {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  width: 100%;
-  z-index: 20;
+  width: 90%;
+  left: 5%;
+  z-index: 1000;
 }
 </style>

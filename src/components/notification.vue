@@ -21,7 +21,7 @@ export default class Notification extends Vue {
   @Prop({ default: false })
   timed!: boolean;
 
-  @Prop({ required: false })
+  @Prop({ required: false, default: "alert" })
   type!: "alert" | "error" | "success";
 
   @Prop()
@@ -43,13 +43,13 @@ export default class Notification extends Vue {
   }
 
   beforeDestroy() {
-    console.log("beforeDestroy");
+    // console.log("beforeDestroy");
     clearTimeout(this.timedClose);
   }
 
   @Watch("message")
   messageChanged() {
-    console.log("messageChanged");
+    // console.log("messageChanged");
     if (this.message != "") {
       this.setupTimed();
       this.isClosed = false;
@@ -67,7 +67,7 @@ export default class Notification extends Vue {
 
   setupTimed() {
     if (this.timed) {
-      console.log("setupTimed");
+      // console.log("setupTimed");
       this.timedClose = setTimeout(this.close, this.delay * 1000);
     }
   }
