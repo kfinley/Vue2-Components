@@ -3,7 +3,7 @@
     <button
       type="button"
       class="clickable btn-close mt-2 me-2"
-      style="position: absolute; top: -8px; right: -8px; font-size: 10px"
+      style="position: absolute; top: -7px; right: -7px; font-size: 10px"
       data-bs-dismiss="alert"
       aria-label="Close"
       @click.prevent="close"
