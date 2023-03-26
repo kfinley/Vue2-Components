@@ -3,7 +3,7 @@
     <div class="notification" v-if="!loading && !isClosed">
       <div class="content-column">
         <div :class="['notification--message', determineNotificationClass]">
-          {{ message }}
+          <span v-html="message"></span>
           <div class="notification--close" @click="close">
             <i class="material-icons">close</i>
           </div>
@@ -81,7 +81,7 @@ export default class Notification extends Vue {
 
   .content-column {
     padding-bottom: $s;
-    padding-top: $s;
+    padding-top: 5px;
   }
 
   &--message {
