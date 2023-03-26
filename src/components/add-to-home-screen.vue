@@ -71,10 +71,10 @@ span.install-popup:after {
   position: absolute;
   width: 0;
   height: 0;
-  border-width: 10px;
+  border-width: 12px;
   border-style: solid;
   border-color: #ffffff transparent transparent transparent;
   top: 68px;
-  left: 47.01%;
+  left: 46.3%;
 }
 </style>
