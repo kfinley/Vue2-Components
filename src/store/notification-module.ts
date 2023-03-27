@@ -42,11 +42,12 @@ export default class NotificationModule
   }
 
   @Mutation
-  add(params: { header?: string; message: string; type: NotificationType }) {
+  add(params: { header?: string; message: string; type: NotificationType, timed?: boolean }) {
     this.notifications.push({
       header: params.header,
       message: params.message,
       type: params.type,
+      timed: params.timed,
     });
   }
 
