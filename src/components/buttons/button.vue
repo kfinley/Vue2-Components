@@ -43,6 +43,9 @@ export default class Button extends Vue {
 </script>
 
 <style lang="scss" scoped>
+/*
+TODO: fix all the buttons so they don't retain pushed on mobile. Look at grey-hove-fill as wip example.
+*/
 .btn--disabled {
   pointer-events: none;
   color: $color--disabled !important;
@@ -76,6 +79,8 @@ export default class Button extends Vue {
   text-align: center;
   text-decoration: none;
   text-transform: none;
+  outline: none;
+  box-shadow: none;
 
   &:link,
   &:visited {
@@ -138,13 +143,17 @@ export default class Button extends Vue {
   &--grey-hover-fill,
   &--grey-hover-fill:link,
   &--grey-hover-fill:visited {
-    background-color: transparent;
-    border-color: $color--grey;
-    color: $color--grey;
+    background: $color--white !important;
+    border-color: $color--grey !important;
+    color: $color--active-text !important;
   }
   &--grey-hover-fill:hover {
     background-color: $color--grey;
     color: $color--white;
+  }
+  &--grey-hover-fill:active {
+    background-color: $color--grey !important;
+    color: $color--white !important;
   }
 
   &--text,
