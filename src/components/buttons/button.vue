@@ -143,9 +143,10 @@ TODO: fix all the buttons so they don't retain pushed on mobile. Look at grey-ho
   &--grey-hover-fill,
   &--grey-hover-fill:link,
   &--grey-hover-fill:visited {
+    background-color: transparent;
     background: $color--white !important;
     border-color: $color--grey !important;
-    color: $color--active-text !important;
+    color: $color--grey !important;
   }
   &--grey-hover-fill:hover {
     background-color: $color--grey;
