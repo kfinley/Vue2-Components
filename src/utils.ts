@@ -19,3 +19,9 @@ export function setStyleProperty(name: string, value: string) {
     value
   );
 }
+
+export function removeStyleProperty(name: string) {
+  document.documentElement.style.removeProperty(
+    name
+  );
+}

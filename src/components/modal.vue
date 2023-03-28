@@ -29,7 +29,7 @@
 //ht https://vuejs.org/v2/examples/modal.html
 import { Component, Vue, Prop } from "vue-property-decorator";
 import Button from "./buttons/button.vue";
-import { setAppHeight, setStyleProperty } from "../utils";
+import { removeStyleProperty, setAppHeight, setStyleProperty } from "../utils";
 
 @Component({
   components: {
@@ -40,10 +40,18 @@ export default class Modal extends Vue {
   @Prop({ default: "60%" })
   width!: string;
 
+  @Prop({ required: false })
+  height!: string;
+
   mounted() {
     setAppHeight();
 
     setStyleProperty("--modal-width", this.width);
+    if (this.height) {
+      setStyleProperty("--modal-height", this.height);
+    } else {
+      removeStyleProperty("--modal-height");
+    }
 
     const zIndex = Math.ceil(new Date().getTime() / 1000).toString();
     (this.$refs.modal as any).style.zIndex = zIndex;
@@ -53,6 +61,4 @@ export default class Modal extends Vue {
 
 <style lang="scss" scoped>
 @import "../styles/modal.scss";
-
-
 </style>
