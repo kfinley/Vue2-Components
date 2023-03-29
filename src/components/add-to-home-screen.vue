@@ -64,6 +64,7 @@ span.install-popup {
   border-radius: 5px;
   text-shadow: rgba(0, 0, 0, 0.1) 1px 1px 1px;
   box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px 0px;
+  z-index: 1000;
 }
 
 span.install-popup:after {
