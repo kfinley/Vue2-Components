@@ -119,7 +119,6 @@ h6 {
 
 .clickable {
   outline: none;
-  user-select: none;
   -webkit-transition: all 0.3s ease;
   -ms-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -130,6 +129,8 @@ h6 {
   &:active {
     transform: translateY(3px);
   }
+  -webkit-user-select: none; /* Safari */
+  user-select: none;
 }
 
 //This is here in order to center modal header slot content. Figure out a better way to do this.
