@@ -44,7 +44,7 @@ export default class Button extends Vue {
 
 <style lang="scss" scoped>
 /*
-TODO: fix all the buttons so they don't retain pushed on mobile. Look at grey-hove-fill as wip example.
+TODO: fix all the buttons so they don't retain pushed state on mobile. Look at grey-hover-fill as wip example.
 */
 .btn--disabled {
   pointer-events: none;
@@ -63,9 +63,9 @@ TODO: fix all the buttons so they don't retain pushed on mobile. Look at grey-ho
 }
 .btn {
   transition: all 400ms ease;
-  background-color: $color--primary;
+  background-color: transparent;
   border-radius: $s * 0.5;
-  border: 1px solid $color--primary;
+  border: 1px solid $color--active-text;
   background-clip: border-box;
   color: $color--active-text;
   display: inline-block;
@@ -74,6 +74,7 @@ TODO: fix all the buttons so they don't retain pushed on mobile. Look at grey-ho
   font-weight: 700;
   overflow: hidden;
   outline: none;
+  margin: 0px 5px;
   // padding: 16px 22px; //TODO: prop this....
   position: relative;
   text-align: center;
@@ -84,19 +85,20 @@ TODO: fix all the buttons so they don't retain pushed on mobile. Look at grey-ho
 
   &:link,
   &:visited {
-    color: $color--active-text;
+    color: $color--active-text !important;
+    background: transparent !important;
   }
 
   &:hover {
-    background-color: $color--active--hover;
-    border-color: $color--active--hover;
+    background-color: $color--active-hover;
     color: $color--white;
-    text-shadow: none;
+  }
 
-    &:after {
-      background: $color--active;
-      height: 450%;
-    }
+  // Calling active out separately with important so it shows when button is held down
+  // if we combine these with above we get the background color state after clicked
+  &:active {
+    background-color: $color--active-hover !important;
+    color: $color--white !important;
   }
 
   // Hover Fill
