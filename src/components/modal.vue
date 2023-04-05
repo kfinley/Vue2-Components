@@ -49,6 +49,7 @@ export default class Modal extends Vue {
     setStyleProperty("--modal-width", this.width);
     if (this.height) {
       setStyleProperty("--modal-height", this.height);
+      setStyleProperty("--modal-body-height", this.height )
     } else {
       removeStyleProperty("--modal-height");
     }
