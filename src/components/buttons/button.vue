@@ -74,7 +74,7 @@ TODO: fix all the buttons so they don't retain pushed state on mobile. Look at g
   font-weight: 700;
   overflow: hidden;
   outline: none;
-  margin: -5px 5px;
+  margin: 0 5px;
   // padding: 16px 22px; //TODO: prop this....
   position: relative;
   text-align: center;

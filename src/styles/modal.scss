@@ -46,10 +46,10 @@
 
 //TODO: split out max-height for breakpoints
 .modal-body {
-  max-height: 72.25vh;
+  max-height: 73.25vh;
   overflow: auto;
   border-bottom: 0px;
-  padding-top: .5em;
+  padding-top: 0.5em;
   padding-bottom: 4em;
   border-top: solid 1px $color--grey80;
   width: 100%;
@@ -61,6 +61,7 @@
   right: 0;
   width: 100%;
   border-top: solid 1px $color--grey80;
+  margin: -5px 5px;
 }
 
 /*

@@ -7,7 +7,7 @@ import { ClientPlugin } from "./types";
 import { Container } from "inversify-props";
 import { initializeModules, notificationModule } from "./store";
 import router from "vue-router";
-import Button from './components/buttons/button.vue';
+import Button from "./components/buttons/button.vue";
 
 import "./styles/styles.scss"; //TODO: look into this... could be some of the css loading ordering issue.
 
