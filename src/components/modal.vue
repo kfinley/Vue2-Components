@@ -4,9 +4,7 @@
       <div class="modal-wrapper">
         <div class="modal-container">
           <div>
-            <i class="material-icons clickable" @click="close"
-              >close</i
-            >
+            <i class="material-icons clickable" @click="close">close</i>
           </div>
           <div class="modal-header">
             <slot name="header" />
@@ -15,7 +13,7 @@
             <slot name="body" />
           </div>
           <div class="modal-footer">
-            <slot name="footer">
+            <slot name="footer" @close="close">
               <Button @click="close"> OK </Button>
             </slot>
           </div>
@@ -59,11 +57,12 @@ export default class Modal extends Vue {
 
     window.document.getElementsByTagName("main")[0].style.cssText =
       "overflow-y: hidden;height: 100vh;";
+
   }
 
   close() {
     window.document.getElementsByTagName("main")[0].removeAttribute("style");
-    this.$emit('close');
+    this.$emit("close");
   }
 }
 </script>
