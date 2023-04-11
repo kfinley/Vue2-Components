@@ -20,7 +20,13 @@ export const equals = (prop, value) => {
     // console.log('prop', prop);
     // console.log(value);
     // console.log(x[prop]);
-    return x[prop] == value;
+
+    if (prop.indexOf(".") > -1) {
+      const props = prop.split(".");
+      return x[props[0]][props[1]] == value;
+    } else {
+      return x[prop] == value;
+    }
   };
 };
 
@@ -39,13 +45,15 @@ export const greater = (x) => {
 export const createEqualsPredicate = function createEqualsPredicate<T>(
   props: Record<string, any>
 ) {
-  const equalsConditions: ((value: T, index: number, obj: T[]) => unknown)[] = [];
+  const equalsConditions: ((value: T, index: number, obj: T[]) => unknown)[] =
+    [];
 
   for (const p in props) {
     equalsConditions.push(equals(p, props[p]));
   }
 
-  let condition: (value: T, index: number, obj: T[]) => unknown = equalsConditions[0];
+  let condition: (value: T, index: number, obj: T[]) => unknown =
+    equalsConditions[0];
 
   equalsConditions.forEach((e) => {
     if (e !== condition) {
