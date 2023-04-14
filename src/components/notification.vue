@@ -64,6 +64,7 @@ export default class Notification extends Vue {
   close() {
     this.isClosed = true;
     this.$emit("notification-closed", this.message);
+    clearTimeout(this.timedClose);
   }
 
   setupTimed() {

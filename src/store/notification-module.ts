@@ -65,7 +65,7 @@ export default class NotificationModule
 
   @Mutation
   dismiss(index: number) {
-    this.notifications = this.notifications.splice(index, 1);
+    this.notifications.splice(index, 1);
   }
 
   @Mutation
