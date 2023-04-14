@@ -5,6 +5,7 @@
         :type="note.type"
         :timed="note.timed"
         :message="note.message"
+        @notification-closed="closed"
       />
     </div>
   </div>
@@ -15,6 +16,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { NotificationState } from "../store";
 import Notification from "./notification.vue";
 import { State } from "vuex-class";
+import { notificationModule } from "@finley/vue2-components/src/store";
 
 @Component({
   components: {
@@ -23,6 +25,12 @@ import { State } from "vuex-class";
 })
 export default class NotificationList extends Vue {
   @State("Notification") state!: NotificationState;
+
+  closed(message: string) {
+    notificationModule.dismiss(
+      this.state.notifications.findIndex((n) => n.message == message)
+    );
+  }
 }
 </script>
 

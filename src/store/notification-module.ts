@@ -1,4 +1,9 @@
-import { AlertType, Notification, HandleErrorParams, NotificationType } from "./../types";
+import {
+  AlertType,
+  Notification,
+  HandleErrorParams,
+  NotificationType,
+} from "./../types";
 import { Module, Mutation, Action } from "vuex-module-decorators";
 import BaseModule from "./base-module";
 import { NotificationState } from "./state";
@@ -6,8 +11,7 @@ import { NotificationState } from "./state";
 @Module({ namespaced: true, name: "Notification" })
 export default class NotificationModule
   extends BaseModule
-  implements NotificationState
-{
+  implements NotificationState {
   notifications: Notification[] = [];
 
   @Action
@@ -27,12 +31,15 @@ export default class NotificationModule
   }
 
   @Mutation
-  handleError (params: HandleErrorParams) {
+  handleError(params: HandleErrorParams) {
     //console.log(params.error);
 
     this.notifications.push({
       header: "Error",
-      message: params.error.message !== undefined ? params.error.message : params.error,
+      message:
+        params.error.message !== undefined
+          ? params.error.message
+          : params.error,
       type: "error",
     });
 
@@ -42,7 +49,12 @@ export default class NotificationModule
   }
 
   @Mutation
-  add(params: { header?: string; message: string; type: NotificationType, timed?: boolean }) {
+  add(params: {
+    header?: string;
+    message: string;
+    type: NotificationType;
+    timed?: boolean;
+  }) {
     this.notifications.push({
       header: params.header,
       message: params.message,
@@ -53,7 +65,7 @@ export default class NotificationModule
 
   @Mutation
   dismiss(index: number) {
-    this.notifications.splice(index, 1);
+    this.notifications = this.notifications.splice(index, 1);
   }
 
   @Mutation

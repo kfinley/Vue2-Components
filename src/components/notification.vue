@@ -51,6 +51,7 @@ export default class Notification extends Vue {
   messageChanged() {
     // console.log("messageChanged");
     if (this.message != "") {
+      clearTimeout(this.timedClose);
       this.setupTimed();
       this.isClosed = false;
     }
@@ -62,7 +63,7 @@ export default class Notification extends Vue {
 
   close() {
     this.isClosed = true;
-    this.$emit("notification-closed", "");
+    this.$emit("notification-closed", this.message);
   }
 
   setupTimed() {
