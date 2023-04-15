@@ -56,13 +56,14 @@ export default class Modal extends Vue {
     const zIndex = Math.ceil(new Date().getTime() / 1000).toString();
     (this.$refs.modal as any).style.zIndex = zIndex;
 
-    const scrollY =
-      document.documentElement.style.getPropertyValue("--scroll-y");
-
-    // These need to be cleared out in any component that uses this modal. 
+    // These need to be cleared out in any component that uses this modal.
     // see commented code in close below.
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}`;
+    if (document.body.style.position !== "fixed") {
+      const scrollY =
+        document.documentElement.style.getPropertyValue("--scroll-y");
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}`;
+    }
   }
 
   close() {
