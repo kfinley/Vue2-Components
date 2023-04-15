@@ -42,6 +42,7 @@ export default class Modal extends Vue {
   height!: string;
 
   mounted() {
+    // console.log("modal.mounted");
     setAppHeight();
 
     setStyleProperty("--modal-width", this.width);
@@ -55,13 +56,24 @@ export default class Modal extends Vue {
     const zIndex = Math.ceil(new Date().getTime() / 1000).toString();
     (this.$refs.modal as any).style.zIndex = zIndex;
 
-    window.document.getElementsByTagName("main")[0].style.cssText =
-      "overflow-y: hidden;height: 100vh;";
+    const scrollY =
+      document.documentElement.style.getPropertyValue("--scroll-y");
 
+    // These need to be cleared out in any component that uses this modal. 
+    // see commented code in close below.
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}`;
   }
 
   close() {
-    window.document.getElementsByTagName("main")[0].removeAttribute("style");
+    // This code needs to be in any modal component.. not ideal.. rework this...
+    // console.log("modal.close");
+    // const scrollY = window.document.body.style.top; // .style.getPropertyValue("--scroll-y");
+
+    // window.document.getElementsByTagName("main")[0].removeAttribute("style");
+    // document.body.style.position = "";
+    // document.body.style.top = ``;
+    // window.scrollTo(0, parseInt(scrollY || "0") * -1);
     this.$emit("close");
   }
 }
