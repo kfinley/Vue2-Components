@@ -3,7 +3,7 @@
     class="btn clickable"
     :class="joinClasses"
     href="javascript:void(0);"
-    @click.prevent="click"
+    @click="click"
   >
     <slot></slot>
   </a>
